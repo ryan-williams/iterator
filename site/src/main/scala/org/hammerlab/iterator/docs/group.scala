@@ -1,10 +1,5 @@
 package org.hammerlab.iterator.docs
 
-import hammerlab.iterator._
-import org.hammerlab.docs.Macros.example
-import cats.implicits._
-import hammerlab.cmp.first._
-
 object group
   extends base {
   val ! =

@@ -1,8 +1,10 @@
 package org.hammerlab.iterator.docs
 
+import cats.instances
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code
+import org.hammerlab.docs.Code.Example
 
 import scalatags.Text.{ Aggregate, Attrs, Cap, Styles }
 import scalatags.{ DataConverters, Text, text }
@@ -17,8 +19,14 @@ trait symbol
 
 trait interp
   extends symbol {
-  self: Cap with Aggregate with text.Tags with DataConverters with Attrs ⇒
-  //self: Aggregate with text.Tags ⇒
+
+  self:
+      Cap
+      with Aggregate
+      with text.Tags
+      with DataConverters
+      with Attrs ⇒
+
   case class Arg(m: Modifier)
   object Arg {
     implicit def string(s: String): Arg = Arg(s)
@@ -56,8 +64,12 @@ trait base
     with Styles
     with text.Tags
     with DataConverters
+    with Example.make
     with symbol
-    with interp {
+    with interp
+    with hammerlab.cmp.first
+    with hammerlab.iterator.all
+    with cats.instances.AllInstances {
 
   def block(body: Code*) =
     pre(

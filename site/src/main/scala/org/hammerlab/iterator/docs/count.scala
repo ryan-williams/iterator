@@ -1,9 +1,5 @@
 package org.hammerlab.iterator.docs
 
-import hammerlab.iterator._
-import org.hammerlab.docs.Macros.example
-import cats.implicits._
-
 object count
   extends base {
   val ! =

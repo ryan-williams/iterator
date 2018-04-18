@@ -2,10 +2,6 @@ package org.hammerlab.iterator.docs
 
 import java.io.ByteArrayInputStream
 
-import cats.implicits._
-import hammerlab.iterator._
-import org.hammerlab.docs.Macros.example
-
 object end
   extends base {
     val ! =

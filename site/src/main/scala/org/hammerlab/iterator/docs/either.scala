@@ -1,11 +1,7 @@
 package org.hammerlab.iterator.docs
 
-import cats.implicits._
-import hammerlab.cmp.first._
-import hammerlab.iterator._
 import org.hammerlab.docs.Code.Setup
-import org.hammerlab.docs.Macros.example
-import org.hammerlab.lines.Lines
+import hammerlab.lines._
 
 object either
   extends base {

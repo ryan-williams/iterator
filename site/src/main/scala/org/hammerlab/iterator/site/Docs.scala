@@ -21,7 +21,8 @@ object Docs
        count !,
       either !,
          end !,
-       group !
+       group !,
+       level !
     )
 
   def main(args: Array[String]): Unit = {
