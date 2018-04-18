@@ -1,6 +1,5 @@
 package org.hammerlab.iterator.docs
 
-import cats.instances
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code
@@ -70,6 +69,15 @@ trait base
     with hammerlab.cmp.first
     with hammerlab.iterator.all
     with cats.instances.AllInstances {
+
+  /**
+   * Optionally override by mixing-in a trait annotated with the [[org.hammerlab.docs.Code.Setup.setup]] macro
+   *
+   * This stub is useful for helping IntelliJ not worry about a macro-generated `setup` member in such cases
+   */
+  // TODO: add self-type `base` to setup-macro's output trait, and add "override" modifier to the `setup` member there,
+  // so that this works
+  //def setup: Setup = null
 
   def block(body: Code*) =
     pre(

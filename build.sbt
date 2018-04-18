@@ -29,7 +29,7 @@ lazy val core =
         ),
       buildInfoPackage := "build_info",
       buildInfoObject := name.value,
-      consolePkgs := "hammerlab.iterator"
+      consolePkgs += "hammerlab.iterator"
     )
     .dependsOn(
       macros
@@ -60,6 +60,7 @@ lazy val site =
         scalatags,
         hammerlab("docs", "snippets") % "1.0.0".snapshot
       ),
+      enableMacroParadise,
       testSuiteVersion := "1.0.0".snapshot
     )
     .enablePlugins(

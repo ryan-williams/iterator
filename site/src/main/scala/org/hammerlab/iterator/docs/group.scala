@@ -9,7 +9,7 @@ object group
       p"Group runs of elements that satisfy a predicate or equivalence relation:",
       block(
         example(
-          Iterator(1, 0, 2, 3, 0, 0, 4, 5, 6).groupRuns((l, r) ⇒ l < r),
+          Iterator(1, 0, 2, 3, 0, 0, 4, 5, 6).groupRuns(_ < _),
           Iterator(Iterator(1), Iterator(0, 2, 3), Iterator(0), Iterator(0, 4, 5, 6))
         )
       ),
