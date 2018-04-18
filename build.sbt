@@ -28,7 +28,8 @@ lazy val core =
           crossTarget
         ),
       buildInfoPackage := "build_info",
-      buildInfoObject := name.value
+      buildInfoObject := name.value,
+      consolePkgs := "hammerlab.iterator"
     )
     .dependsOn(
       macros

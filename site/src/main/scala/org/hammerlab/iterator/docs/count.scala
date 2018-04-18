@@ -1,17 +1,15 @@
-package org.hammerlab.iterator.count
+package org.hammerlab.iterator.docs
 
 import hammerlab.iterator._
-import org.hammerlab.iterator
 import org.hammerlab.docs.Macros.example
-import cats.instances.int.catsKernelStdOrderForInt
-import org.hammerlab.docs.Code
+import cats.implicits._
 
-trait docs
-  extends iterator.docs {
-  val count =
+object count
+  extends base {
+  val ! =
     pkg(
       'count,
-      code(
+      block(
         example(
           Array(1, 2, 1, 3).countElems,
           Map(1→2, 2→1, 3→1)
@@ -22,8 +20,4 @@ trait docs
         )
       )
     )
-}
-
-object docs extends docs {
-  val body = count
 }

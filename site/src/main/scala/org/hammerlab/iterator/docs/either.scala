@@ -1,26 +1,28 @@
-package org.hammerlab.iterator.either
+package org.hammerlab.iterator.docs
 
-import org.hammerlab.iterator
-import org.hammerlab.docs.Macros.example
 import cats.implicits._
 import hammerlab.cmp.first._
-import org.hammerlab.test.Cmp
+import hammerlab.iterator._
+import org.hammerlab.docs.Code.Setup
+import org.hammerlab.docs.Macros.example
+import org.hammerlab.lines.Lines
 
-trait docs
-  extends iterator.docs {
-
-  import hammerlab.iterator._
+object either
+  extends base {
 
   def L[T](t: T) = Left(t)
   def R[T](t: T) = Right(t)
 
-  implicitly[Cmp[Iterator[Int]]]
-  implicitly[Cmp[(Int, Int)]]
-
-  val either =
+  val ! =
     pkg(
       'either,
-      code(
+      block(
+        Setup(
+          Lines(
+            "def L[T](t: T) =  Left(t)",
+            "def R[T](t: T) = Right(t)"
+          )
+        ),
         example(
           Iterator(R('a), R('b), L(4)).findLeft,
           Some(4)
@@ -41,8 +43,4 @@ trait docs
         )
       )
     )
-}
-
-object docs extends docs {
-  val body = either
 }

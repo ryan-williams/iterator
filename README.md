@@ -70,10 +70,10 @@ import scala.io.Source.fromFile
 val source = fromFile("build.sbt")
 source
   .filter(_ == 'a')
-  .finish({
+  .finish {
     println("closing!")
     source.close()
-  })
+  }
   .size
 
 // 32
