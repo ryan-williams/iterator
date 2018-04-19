@@ -36,6 +36,7 @@ object either {
             )
             .groupByLeft
             .mapValues(_.mkString),
+
             Iterator((1,"'b'c"), (2,""), (3,"'d"))
           )
         )

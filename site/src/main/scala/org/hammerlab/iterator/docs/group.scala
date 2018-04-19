@@ -6,6 +6,7 @@ object group
     pkg(
       'group,
 
+      h4(code('groupRuns)),
       p"Group runs of elements that satisfy a predicate or equivalence relation:",
       block(
         example(
@@ -14,6 +15,7 @@ object group
         )
       ),
 
+      h4(code('runLengthEncode)),
       p"Run-length encode elements:",
       block(
         example(
@@ -22,6 +24,7 @@ object group
         )
       ),
 
+      h4(code('cappedCostGroups)),
       p"Contiguous weighted sums up to a maximum:",
       block(
         example(

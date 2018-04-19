@@ -1,28 +1,35 @@
 package org.hammerlab.iterator.docs
 
+import org.hammerlab.docs
 import java.io.ByteArrayInputStream
 
-object end
-  extends base {
-    val ! =
+object end {
+  @docs.setup
+  trait setup {
+    val stream = new ByteArrayInputStream("scala".getBytes)
+    val bytes = Array.fill(stream.available())(0.toByte)
+    stream.read(bytes)
+  }
+
+  object make
+    extends base
+       with setup {
+    def apply() =
       pkg(
         'end,
         p"${'finish}: run a closure when the iterator is finished traversing:",
         block(
+          setup,
           example(
-            {
-              val source = new ByteArrayInputStream("scala".getBytes)
-              val bytes = Array.fill(source.available())(0.toByte)
-              source.read(bytes)
-              bytes
-                .filter(_ == 'a')
-                .finish {
-                  println("closing!")
-                  source.close()
-                }
-                .size
-            },
-            // prints "closing!" and closes `source` after traversal is finished
+            bytes
+              .filter(_ == 'a')
+              .finish {
+                println("closing!")
+                stream.close()
+              }
+              .size,
+
+            // prints "closing!" and closes `stream` after traversal is finished
             2
           )
         ),
@@ -34,4 +41,7 @@ object end
           )
         )
       )
+  }
+
+  val ! = make()
 }

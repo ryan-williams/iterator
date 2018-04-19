@@ -2,22 +2,20 @@ package org.hammerlab.iterator.site
 
 import hammerlab.show._
 import org.hammerlab.iterator.docs._
-import org.scalajs.dom
+import org.scalajs.dom.document
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import scalatags.Text.all.{ `class`, div }
 
 @JSExportTopLevel("hammerlab.iterators.docs")
 object Docs
-  extends symbol {
-
-  object cls {
-    def -(name: String) = `class` := name
-  }
+  extends scalatags.Text.Cap
+     with symbol
+     with utils {
 
   val html =
     div(
-      cls-'container,
+      clz - 'container,
        count !,
       either !,
          end !,
@@ -26,6 +24,9 @@ object Docs
     )
 
   def main(args: Array[String]): Unit = {
-    dom.document.getElementById("main").innerHTML = html.render
+    document
+      .getElementById("main")
+      .innerHTML =
+      html.render
   }
 }

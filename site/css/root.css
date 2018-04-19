@@ -1,0 +1,17 @@
+pre {
+  padding: 3px;
+  margin-bottom: 1.5em;
+}
+
+code {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+h1, h2, h3 {
+  margin-bottom: 0.4em;
+}
+
+h4 {
+  margin-bottom: 0.5em;
+}

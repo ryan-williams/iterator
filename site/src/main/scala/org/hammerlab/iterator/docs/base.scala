@@ -5,8 +5,16 @@ import hammerlab.show._
 import org.hammerlab.docs.Code
 import org.hammerlab.docs.Code.Example
 
+import scalatags.Text.all.`class`
 import scalatags.Text.{ Aggregate, Attrs, Cap, Styles }
 import scalatags.{ DataConverters, Text, text }
+
+trait utils
+  extends Attrs {
+  object clz {
+    def -(name: String) = `class` := name
+  }
+}
 
 trait symbol
   extends Aggregate {
@@ -66,6 +74,7 @@ trait base
     with Example.make
     with symbol
     with interp
+    with utils
     with hammerlab.cmp.first
     with hammerlab.iterator.all
     with cats.instances.AllInstances {
@@ -81,10 +90,13 @@ trait base
 
   def block(body: Code*) =
     pre(
-      Code
-        .lines(body: _*)
-        .join("\n")
-        .show
+      code(
+        clz - 'scala,
+        Code
+          .lines(body: _*)
+          .join("\n")
+          .show
+      )
     )
 
   def pkgLink(name: String) =
