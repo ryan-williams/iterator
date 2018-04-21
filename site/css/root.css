@@ -1,6 +1,18 @@
+body {
+  position: relative;
+  padding-left: 150px;
+}
+
+#nav-container {
+  position: fixed;
+  width: 150px;
+  margin-left: -150px;
+}
+
 pre {
-  padding: 3px;
+  padding: 5px;
   margin-bottom: 1.5em;
+  background-color: lightgrey;
 }
 
 code {
@@ -18,4 +30,17 @@ h4 {
 
 #main {
   margin-bottom: 5em;
+}
+
+.scrollspy-example {
+  position: relative;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+#list-example {
+  margin-top: 1em;
+}
+#list-example > div {
+  position: fixed;
 }

@@ -111,7 +111,8 @@ trait base
 
   def pkgLink(name: String) =
     a(
-      href := name,
+      href := '#' + name,
+      id := name,
       h1(name)
     )
 
