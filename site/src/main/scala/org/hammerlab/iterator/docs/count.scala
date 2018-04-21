@@ -4,8 +4,7 @@ object count
   extends base {
   val ! =
     pkg(
-      'count,
-      block(
+      fence(
         example(
           Array(1, 2, 1, 3).countElems,
           Map(1→2, 2→1, 3→1)

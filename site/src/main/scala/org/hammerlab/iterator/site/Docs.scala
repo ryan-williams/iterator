@@ -16,11 +16,18 @@ object Docs
   val html =
     div(
       clz - 'container,
-       count !,
-      either !,
-         end !,
-       group !,
-       level !
+         count !,
+        either !,
+           end !,
+         group !,
+         level !,
+      ordering !,
+         range !,
+        sample !,
+          scan !,
+       sliding !,
+         start !,
+          util !
     )
 
   def main(args: Array[String]): Unit = {

@@ -1,6 +1,8 @@
 
 default(
-  scalacOptions += "-Yrangepos"
+  scalacOptions += "-Yrangepos",
+  testSuiteVersion := "1.0.0".snapshot,
+  testUtilsVersion := "1.0.1".snapshot
 )
 
 lazy val core =
@@ -56,12 +58,11 @@ lazy val site =
     .settings(
       scalaJSUseMainModuleInitializer := true,
       dep(
-        hammerlab.io % "5.0.0",
+        hammerlab.io % "5.0.0".snapshot,
         scalatags,
         hammerlab("docs", "snippets") % "1.0.0".snapshot
       ),
-      enableMacroParadise,
-      testSuiteVersion := "1.0.0".snapshot
+      enableMacroParadise
     )
     .enablePlugins(
       ScalaJSPlugin

@@ -1,10 +1,11 @@
 package org.hammerlab.iterator.docs
 
 import org.hammerlab.docs
+import org.hammerlab.docs.block
 
 object either {
 
-  @docs.setup
+  @block
   trait setup {
     def L[T](t: T) =  Left(t)
     def R[T](t: T) = Right(t)
@@ -17,8 +18,7 @@ object either {
        with setup {
     def apply() =
       pkg(
-        'either,
-        block(
+        fence(
           setup,
           example(
             Iterator(R('a), R('b), L(4)).findLeft,

@@ -3,9 +3,9 @@ package org.hammerlab.iterator.docs
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code
-import org.hammerlab.docs.Code.Example
+import org.hammerlab.docs.Code.{ Comment, Example }
+import hammerlab.lines._
 
-import scalatags.Text.all.`class`
 import scalatags.Text.{ Aggregate, Attrs, Cap, Styles }
 import scalatags.{ DataConverters, Text, text }
 
@@ -36,8 +36,8 @@ trait interp
 
   case class Arg(m: Modifier)
   object Arg {
-    implicit def string(s: String): Arg = Arg(s)
-    implicit def symbol(s: Symbol): Arg = Arg(s)
+    implicit def string(s: String): Arg = Arg(code(s))
+    implicit def symbol(s: Symbol): Arg = Arg(code(s))
     implicit def modifier(m: Modifier): Arg = Arg(m)
     implicit def unwrap(a: Arg): Modifier = a.m
   }
@@ -46,19 +46,19 @@ trait interp
     def t(args: Arg*): Seq[Modifier] = {
       val strings =
         sc
-        .parts
-        .iterator
-        .map{ s ⇒ s: Modifier }
+          .parts
+          .iterator
+          .map{ s ⇒ s: Modifier }
 
       strings.next ::
         args
-        .iterator
-        .zip(strings)
-        .flatMap {
-          case (arg, string) ⇒
-            Iterator(code(arg), string)
-        }
-        .toList
+          .iterator
+          .zip(strings)
+          .flatMap {
+            case (arg, string) ⇒
+              Iterator(arg: Modifier, string)
+          }
+          .toList
     }
 
     def p(args: Arg*): Modifier = scalatags.Text.tags.p(t(args: _*))
@@ -79,23 +79,33 @@ trait base
     with hammerlab.iterator.all
     with cats.instances.AllInstances {
 
-  /**
-   * Optionally override by mixing-in a trait annotated with the [[org.hammerlab.docs.Code.Setup.setup]] macro
-   *
-   * This stub is useful for helping IntelliJ not worry about a macro-generated `setup` member in such cases
-   */
-  // TODO: add self-type `base` to setup-macro's output trait, and add "override" modifier to the `setup` member there,
-  // so that this works
-  //def setup: Setup = null
+  def c3(name: String) = h3(code(name))
 
-  def block(body: Code*) =
+  val github = s"https://github.com"
+
+  // Link to a github issue
+  def issue(org: String, repo: String, issue: Int, comment: Int): Modifier = this.issue(org, repo, issue, Some(comment))
+  def issue(org: String, repo: String, issue: Int, comment: Option[Int] = None): Modifier =
+    a(
+      href := s"$github/$org/$repo/issues/$issue${comment.fold("")(c ⇒ s"#issuecomment-$c")}",
+      s"$org/$repo#$issue"
+    )
+
+  def fence(body: Code*) =
     pre(
       code(
         clz - 'scala,
-        Code
-          .lines(body: _*)
-          .join("\n")
-          .show
+        Lines(
+          body
+            .map {
+              case c: Comment ⇒
+                // don't add an extra newline after Comments; call-site can do that if desired
+                Comment.lines(c)
+              case c ⇒
+                Lines(Code.lines.apply(c), "")
+            }: _*
+        )
+        .showLines
       )
     )
 
@@ -105,8 +115,19 @@ trait base
       h1(name)
     )
 
+  def pkg(body: Text.Modifier*)(implicit name: sourcecode.Enclosing): Modifier =
+    pkg(
+      name
+        .value
+        .split("\\.")
+        .dropWhile(_ != "docs")
+        .drop(1)
+        .head,
+      body: _*
+    )
+
   def pkg(name: String,
-          body: Text.Modifier*) =
+          body: Text.Modifier*): Modifier =
     div(
       (
         Seq(

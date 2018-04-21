@@ -2,14 +2,14 @@ package org.hammerlab.iterator.docs
 
 import hammerlab.iterator._
 import hammerlab.option._
-import org.hammerlab.docs
+import org.hammerlab.docs.block
 import org.hammerlab.test.Cmp
 
 object level {
 
   val ! = make()
 
-  @docs.setup
+  @block
   trait setup {
     val it1 = Iterator(  1,   2)
     val it2 = Iterator(  3,   4)
@@ -24,9 +24,8 @@ object level {
 
     def apply() =
       pkg(
-        'level,
         p"Flatten a nested iterator but retain access to a cursor into unflattened version:",
-        block(
+        fence(
           setup,
           example( it.cur.get,  it1 ),
           example( it.next   ,    1 ),

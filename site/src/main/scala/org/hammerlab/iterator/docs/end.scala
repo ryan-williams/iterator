@@ -3,8 +3,10 @@ package org.hammerlab.iterator.docs
 import org.hammerlab.docs
 import java.io.ByteArrayInputStream
 
+import org.hammerlab.docs.block
+
 object end {
-  @docs.setup
+  @block
   trait setup {
     val stream = new ByteArrayInputStream("scala".getBytes)
     val bytes = Array.fill(stream.available())(0.toByte)
@@ -16,9 +18,9 @@ object end {
        with setup {
     def apply() =
       pkg(
-        'end,
-        p"${'finish}: run a closure when the iterator is finished traversing:",
-        block(
+        c3('finish),
+        p"Run a closure when an iterator is finished traversing:",
+        fence(
           setup,
           example(
             bytes
@@ -33,8 +35,9 @@ object end {
             2
           )
         ),
-        p"${'dropRight}: drop ${'k} elements from the end of an iterator in ${"O(k)"} space:",
-        block(
+        c3('dropRight),
+        p"Drop ${'k} elements from the end of an iterator in ${"O(k)"} space:",
+        fence(
           example(
             Iterator(1 to 10: _*).dropright(4),
             Iterator(1, 2, 3, 4, 5, 6)
