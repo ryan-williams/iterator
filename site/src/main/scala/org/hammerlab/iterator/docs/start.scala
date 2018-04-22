@@ -2,8 +2,10 @@ package org.hammerlab.iterator.docs
 
 import org.hammerlab.docs.block
 
-object start {
-  val ! = make()
+object start
+  extends section {
+
+  val ! = make.!
 
   @block trait setup {
     val it = (1 to 10).iterator.buffered
@@ -27,9 +29,9 @@ object start {
        with eager
        with stdlib
        with stdlib2 {
-    def apply() =
-      pkg(
-        h3(t"Buffered {${'take}, ${'drop}, ${'collect}}${'while}"),
+    val ! =
+      h(
+        dsl.h('bulk, t"Buffered {${'take}, ${'drop}, ${'collect}}${'while}"),
         p"${'takewhile}, ${'dropwhile}, and ${'collectwhile} for ${'BufferedIterator}s, consuming only the necessary elements:",
         fence(
           setup,
@@ -52,7 +54,7 @@ object start {
             Iterator(9, 10)
           )
         ),
-        h3(t"Eager ${'take}, ${'drop}"),
+        dsl.h('eager, t"Eager ${'take}, ${'drop}"),
         p"${'takeEager} and ${'dropEager} do what you probably expect ${'take} and ${'drop} to do:",
         fence(
           eager,
@@ -89,7 +91,7 @@ object start {
           )
         ),
         p"See ${issue('scala, 'bug, 9247, 308218901)} for more information",
-        h3(t"{${'head},${'next}}${'Option}"),
+        dsl.h('head, t"{${'head},${'next}}${'Option}"),
         fence(
           example(
             Iterator(1, 2, 3, 4).buffered.headOption,

@@ -4,7 +4,7 @@ object sample
   extends base {
   scala.util.Random.setSeed(123)
   val ! =
-    pkg(
+    h(
       p"Resevoir-sample:",
       fence(
         example(

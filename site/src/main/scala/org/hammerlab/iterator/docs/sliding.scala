@@ -3,7 +3,7 @@ package org.hammerlab.iterator.docs
 object sliding
   extends base {
   val ! =
-    pkg(
+    h(
       p"Windows of size 2, including an optional next or previous element:",
       fence(
         example(

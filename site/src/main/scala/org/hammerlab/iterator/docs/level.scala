@@ -5,9 +5,10 @@ import hammerlab.option._
 import org.hammerlab.docs.block
 import org.hammerlab.test.Cmp
 
-object level {
+object level
+  extends section {
 
-  val ! = make()
+  val ! = make.!
 
   @block
   trait setup {
@@ -22,8 +23,8 @@ object level {
 
     implicit val cmpIt: Cmp[Iterator[Int]] = Cmp((l, r) ⇒ (l != r) ? "!=")
 
-    def apply() =
-      pkg(
+    val ! =
+      h(
         p"Flatten a nested iterator but retain access to a cursor into unflattened version:",
         fence(
           setup,

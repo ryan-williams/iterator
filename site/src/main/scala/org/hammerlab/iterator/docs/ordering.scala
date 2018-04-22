@@ -3,7 +3,8 @@ package org.hammerlab.iterator.docs
 import org.hammerlab.docs
 import org.hammerlab.docs.block
 
-object ordering {
+object ordering
+  extends section {
 
   import hammerlab.iterator.View
 
@@ -13,14 +14,14 @@ object ordering {
     implicit val _ = View[(Symbol, Int), Int](_._2)
   }
 
-  val ! = make()
+  val ! = make.!
 
   object make
     extends base
       with either.setup
       with view {
-    def apply() =
-      pkg(
+    val ! =
+      h(
         p"A variety of merge operations are available for sequences that are mutually ordered (possibly with respect to some 3rd type that each of their elements can be converted to).",
         c3('eitherMerge),
         p"Merge two ordered sequences using ${'Either}s to preserve provenance (or handle the case that the sequences' elements are not the same type):",

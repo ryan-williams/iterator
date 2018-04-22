@@ -1,9 +1,9 @@
 package org.hammerlab.iterator.docs
 
-import org.hammerlab.docs
 import org.hammerlab.docs.block
 
-object either {
+object either
+  extends section {
 
   @block
   trait setup {
@@ -11,13 +11,13 @@ object either {
     def R[T](t: T) = Right(t)
   }
 
-  val ! = make()
+  val ! = make.!
 
   object make
     extends base
        with setup {
-    def apply() =
-      pkg(
+    val ! =
+      h(
         fence(
           setup,
           example(

@@ -24,23 +24,14 @@ h1, h2, h3 {
   margin-bottom: 0.4em;
 }
 
+h3 {
+  font-size: 1.65em;
+}
+
 h4 {
   margin-bottom: 0.5em;
 }
 
 #main {
   margin-bottom: 5em;
-}
-
-.scrollspy-example {
-  position: relative;
-  height: 100%;
-  overflow-y: scroll;
-}
-
-#list-example {
-  margin-top: 1em;
-}
-#list-example > div {
-  position: fixed;
 }

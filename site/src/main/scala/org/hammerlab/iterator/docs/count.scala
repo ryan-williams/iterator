@@ -3,7 +3,7 @@ package org.hammerlab.iterator.docs
 object count
   extends base {
   val ! =
-    pkg(
+    h(
       fence(
         example(
           Array(1, 2, 1, 3).countElems,

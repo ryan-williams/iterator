@@ -5,7 +5,7 @@ import org.hammerlab.docs.block
 object util
   extends base {
   val ! =
-    pkg(
+    h(
       c3('SimpleIterator), // TODO: link
       p"Interface for easily defining (buffered) ${'Iterator}s in terms of one function, ${'_advance}, that returns an ${'Option}.",
       p"${'head} and ${'hasNext} are cached until ${'next} is called",

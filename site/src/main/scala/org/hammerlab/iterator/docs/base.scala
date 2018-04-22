@@ -36,33 +36,43 @@ trait interp
 
   case class Arg(m: Modifier)
   object Arg {
-    implicit def string(s: String): Arg = Arg(code(s))
-    implicit def symbol(s: Symbol): Arg = Arg(code(s))
+    implicit def   string(s:   String): Arg = Arg(code(s))
+    implicit def   symbol(s:   Symbol): Arg = Arg(code(s))
     implicit def modifier(m: Modifier): Arg = Arg(m)
     implicit def unwrap(a: Arg): Modifier = a.m
   }
 
   implicit class CodeContext(sc: StringContext) {
-    def t(args: Arg*): Seq[Modifier] = {
+    def t(args: Arg*): Elem.Tag = {
       val strings =
         sc
           .parts
           .iterator
           .map{ s ⇒ s: Modifier }
 
-      strings.next ::
+      Elem.Tag(
+        strings.next ::
         args
           .iterator
           .zip(strings)
           .flatMap {
             case (arg, string) ⇒
-              Iterator(arg: Modifier, string)
+              Iterator(
+                arg: Modifier,
+                string
+              )
           }
           .toList
+      )
     }
 
-    def p(args: Arg*): Modifier = scalatags.Text.tags.p(t(args: _*))
+    def p(args: Arg*): Modifier = scalatags.Text.tags.p(t(args: _*).value: _*)
   }
+}
+
+trait section {
+  import Elem._
+  def ! : Section
 }
 
 trait base
@@ -77,9 +87,12 @@ trait base
     with utils
     with hammerlab.cmp.first
     with hammerlab.iterator.all
-    with cats.instances.AllInstances {
+    with cats.instances.AllInstances
+    with section {
 
-  def c3(name: String) = h3(code(name))
+  import Elem._
+
+  def c3(name: String) = dsl.h(name)
 
   val github = s"https://github.com"
 
@@ -91,7 +104,9 @@ trait base
       s"$org/$repo#$issue"
     )
 
-  def fence(body: Code*) =
+  type T = Elem.Tag
+
+  def fence(body: Code*): T =
     pre(
       code(
         clz - 'scala,
@@ -109,14 +124,16 @@ trait base
       )
     )
 
-  def pkgLink(name: String) =
-    a(
-      href := '#' + name,
-      id := name,
-      h1(name)
-    )
+//  def pkgLink(name: String): T =
+//    a(
+//      href := '#' + name,
+//      id := name,
+//      h1(name)
+//    )
 
-  def pkg(body: Text.Modifier*)(implicit name: sourcecode.Enclosing): Modifier =
+  val dsl = Elem.dsl
+
+  def h(body: Elem*)(implicit name: sourcecode.Enclosing): Section =
     pkg(
       name
         .value
@@ -128,15 +145,11 @@ trait base
     )
 
   def pkg(name: String,
-          body: Text.Modifier*): Modifier =
-    div(
-      (
-        Seq(
-          pkgLink(name)
-        ) ++
-        body
-      ): _*
+          body: Elem*): Section =
+    dsl.h(
+      Id(name),
+      (/*pkgLink(name) :: */body.toList): _*
     )
 }
 
-object base extends base
+//object base extends base

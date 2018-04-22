@@ -9,7 +9,7 @@ object range
   import hammerlab.iterator.range._
 
   val ! =
-    pkg(
+    h(
       c3('sliceOpt),
       p"Select index-ranges from an iterator where the arguments can be options:",
       fence(
