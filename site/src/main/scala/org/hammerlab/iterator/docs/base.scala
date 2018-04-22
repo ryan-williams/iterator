@@ -7,10 +7,11 @@ import org.hammerlab.docs.Code.{ Comment, Example }
 import hammerlab.lines._
 
 import scalatags.Text.{ Aggregate, Attrs, Cap, Styles }
+import scalatags.Text.all.`class`
 import scalatags.{ DataConverters, Text, text }
 
-trait utils
-  extends Attrs {
+trait attr_dsl
+  extends Aggregate {
   object clz {
     def -(name: String) = `class` := name
   }
@@ -24,15 +25,22 @@ trait symbol
     (t: text.Builder, a: Attr, v: Symbol) ⇒ av(t, a, v)
 }
 
+case class URL(value: String)
+object URL {
+  trait utils
+    extends Aggregate {
+    implicit def urlToAttrValue(implicit av: AttrValue[String]): AttrValue[URL] =
+      (t: text.Builder, a: Attr, v: URL) ⇒ av(t, a, v.value)
+  }
+}
+
 trait interp
   extends symbol {
 
-  self:
-      Cap
-      with Aggregate
-      with text.Tags
-      with DataConverters
-      with Attrs ⇒
+  self: Aggregate ⇒
+
+  import scalatags.Text.tags
+  import scalatags.Text.tags.{code, span}
 
   case class Arg(m: Modifier)
   object Arg {
@@ -50,23 +58,25 @@ trait interp
           .iterator
           .map{ s ⇒ s: Modifier }
 
-      Elem.Tag(
-        strings.next ::
-        args
-          .iterator
-          .zip(strings)
-          .flatMap {
-            case (arg, string) ⇒
-              Iterator(
-                arg: Modifier,
-                string
-              )
-          }
-          .toList
+      span(
+        (
+          strings.next ::
+          args
+            .iterator
+            .zip(strings)
+            .flatMap {
+              case (arg, string) ⇒
+                Iterator(
+                  arg: Modifier,
+                  string
+                )
+            }
+            .toList
+        ): _*
       )
     }
 
-    def p(args: Arg*): Modifier = scalatags.Text.tags.p(t(args: _*).value: _*)
+    def p(args: Arg*): Modifier = tags.p(t(args: _*).value)
   }
 }
 
@@ -84,15 +94,16 @@ trait base
     with Example.make
     with symbol
     with interp
-    with utils
+    with attr_dsl
     with hammerlab.cmp.first
     with hammerlab.iterator.all
     with cats.instances.AllInstances
-    with section {
+    with section
+    with fence.utils {
 
   import Elem._
 
-  def c3(name: String) = dsl.h(name)
+  def c3(name: String) = dsl.h(name, code(name))
 
   val github = s"https://github.com"
 
@@ -104,52 +115,18 @@ trait base
       s"$org/$repo#$issue"
     )
 
-  type T = Elem.Tag
-
-  def fence(body: Code*): T =
-    pre(
-      code(
-        clz - 'scala,
-        Lines(
-          body
-            .map {
-              case c: Comment ⇒
-                // don't add an extra newline after Comments; call-site can do that if desired
-                Comment.lines(c)
-              case c ⇒
-                Lines(Code.lines.apply(c), "")
-            }: _*
-        )
-        .showLines
-      )
-    )
-
-//  def pkgLink(name: String): T =
-//    a(
-//      href := '#' + name,
-//      id := name,
-//      h1(name)
-//    )
-
   val dsl = Elem.dsl
 
   def h(body: Elem*)(implicit name: sourcecode.Enclosing): Section =
-    pkg(
-      name
-        .value
-        .split("\\.")
-        .dropWhile(_ != "docs")
-        .drop(1)
-        .head,
+    dsl.h(
+      Id(
+        name
+          .value
+          .split("\\.")
+          .dropWhile(_ != "docs")
+          .drop(1)
+          .head
+      ),
       body: _*
     )
-
-  def pkg(name: String,
-          body: Elem*): Section =
-    dsl.h(
-      Id(name),
-      (/*pkgLink(name) :: */body.toList): _*
-    )
 }
-
-//object base extends base

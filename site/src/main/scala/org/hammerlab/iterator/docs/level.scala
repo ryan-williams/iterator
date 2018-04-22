@@ -28,15 +28,15 @@ object level
         p"Flatten a nested iterator but retain access to a cursor into unflattened version:",
         fence(
           setup,
-          example( it.cur.get,  it1 ),
-          example( it.next   ,    1 ),
-          example( it.cur.get,  it1 ),
-          example( it.next   ,    2 ),
-          example( it.cur.get,  it2 ),
-          example( it.next   ,    3 ),
-          example( it.cur.get,  it2 ),
-          example( it.next   ,    4 ),
-          example( it.cur    , None )
+          example(it.cur.get,  it1),
+          example(it.next   ,    1),
+          example(it.cur.get,  it1),
+          example(it.next   ,    2),
+          example(it.cur.get,  it2),
+          example(it.next   ,    3),
+          example(it.cur.get,  it2),
+          example(it.next   ,    4),
+          example(it.cur    , None)
         )
       )
   }

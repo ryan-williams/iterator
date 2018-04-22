@@ -9,6 +9,7 @@ lazy val core =
   crossProject
     .settings(
       name := "iterator",
+      github.repo("iterators"),
       v"2.1.0",
       // Skip compilation during doc-generation; otherwise it fails due to macro-annotations not being expanded
       emptyDocJar,
@@ -21,17 +22,25 @@ lazy val core =
       ),
       buildInfoKeys :=
         Seq[BuildInfoKey](
+          organization,
           name,
           version,
           scalaVersion,
           sbtVersion,
-          baseDirectory,
-          target,
-          crossTarget
+          modName,
+          githubUser,
+          githubRepo,
         ),
       buildInfoPackage := "build_info",
       buildInfoObject := name.value,
       consolePkgs += "hammerlab.iterator"
+    )
+    .jvmSettings(
+      buildInfoKeys ++= Seq[BuildInfoKey](
+        baseDirectory,
+        target,
+        crossTarget
+      )
     )
     .dependsOn(
       macros
@@ -56,6 +65,7 @@ lazy val macrosJVM = macros.jvm
 lazy val site =
   project
     .settings(
+      scala212Only,
       scalaJSUseMainModuleInitializer := true,
       dep(
         hammerlab.io % "5.0.0".snapshot,

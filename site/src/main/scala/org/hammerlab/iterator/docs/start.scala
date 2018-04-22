@@ -31,7 +31,10 @@ object start
        with stdlib2 {
     val ! =
       h(
-        dsl.h('bulk, t"Buffered {${'take}, ${'drop}, ${'collect}}${'while}"),
+        dsl.h(
+          'bulk,
+          title = t"Buffered {${'take}, ${'drop}, ${'collect}}${'while}"
+        ),
         p"${'takewhile}, ${'dropwhile}, and ${'collectwhile} for ${'BufferedIterator}s, consuming only the necessary elements:",
         fence(
           setup,
@@ -54,7 +57,10 @@ object start
             Iterator(9, 10)
           )
         ),
-        dsl.h('eager, t"Eager ${'take}, ${'drop}"),
+        dsl.h(
+          'eager,
+          title = t"Eager ${'take}, ${'drop}"
+        ),
         p"${'takeEager} and ${'dropEager} do what you probably expect ${'take} and ${'drop} to do:",
         fence(
           eager,

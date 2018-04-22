@@ -36,7 +36,7 @@ object ordering
         fence(
           example(
             Seq(1, 3, 4).leftMerge(Seq(2, 3, 5, 6)),
-            Iterator((1,Iterator(2)), (3,Iterator(3)), (4,Iterator(5, 6)))
+            Iterator((1, Iterator(2)), (3, Iterator(3)), (4, Iterator(5, 6)))
           )
         ),
         c3('merge),
@@ -51,12 +51,12 @@ object ordering
         fence(
           view,
           example(
-            Seq('a→1, 'b→3).merge(Seq('c→2)),
-            Iterator('a→1, 'c→2, 'b→3)
+            Seq('a → 1, 'b → 3).merge(Seq('c→2)),
+            Iterator('a → 1, 'c → 2, 'b → 3)
           ),
           example(
             Seq('a → 1, 'b → 3).eitherMerge(Seq(2)),
-            Iterator(L('a→1), R(2), L('b→3))
+            Iterator(L('a → 1), R(2), L('b → 3))
           )
         )
       )
