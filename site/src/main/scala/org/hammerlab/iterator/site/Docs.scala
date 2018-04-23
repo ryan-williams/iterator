@@ -1,9 +1,8 @@
 package org.hammerlab.iterator.site
 
 import hammerlab.show._
-import org.hammerlab.docs.block
 import org.hammerlab.docs.Code.Example
-import org.hammerlab.iterator.docs.Elem.{ Section, dsl }
+import org.hammerlab.docs.block
 import org.hammerlab.iterator.docs._
 import org.scalajs.dom.document
 
@@ -17,7 +16,8 @@ object Docs
      with symbol
      with URL.utils
      with attr_dsl
-     with Example.make {
+     with Example.make
+     with Elem.dsl {
 
   val sections =
     List(
@@ -36,17 +36,16 @@ object Docs
     )
     .map(_ !)
 
-  import scalatags.Text.all._
-
-  import build_info.iterator.{ organization, name, version, githubUser, githubRepo, modName }
-
-  import hammerlab.iterator._
-  import hammerlab.cmp.first._
+  import build_info.iterator.{ githubRepo, githubUser, modName, name, organization, version }
   import cats.implicits.catsKernelStdOrderForInt
+  import hammerlab.cmp.first._
+  import hammerlab.iterator._
+
+  import scalatags.Text.all._
 
   implicit val github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)
-  import badge.{ travis, coveralls, mavenCentral }
+  import badge.{ coveralls, mavenCentral, travis }
 
   val intro =
     List[Elem](
@@ -79,6 +78,7 @@ object Docs
         code(
           Seq(
             "libraryDependencies += \"%s\"  %%%% \"%s\" %% \"%s\"".format(organization, name, version),
+            "",
             "// For ScalaJS:",
             "libraryDependencies += \"%s\" %%%%%% \"%s\" %% \"%s\"".format(organization, name, version)
           )
@@ -90,11 +90,11 @@ object Docs
     )
 
   val html =
-    dsl.h(
+    h(
       'iterators,
       badge.github.link('iterators),
       intro,
-      dsl.h(
+      h(
         'examples,
         "Examples",
         p"Grouped by package:",
@@ -102,20 +102,24 @@ object Docs
       )
     )
 
+  val rendered = Tree.Section(html)
+
   val menu =
     li(
       clz - "sidebar-brand",
       "Packages:"
     ) ::
-    sections
-      .map {
-        case Section(id, name, _, elems) ⇒
+    rendered
+      .children
+      .toList
+      .collect {
+        case Tree.Section(id, title, elems) ⇒
           li(
             clz - "nav-item",
             a(
-              href := '#' + id.value,
+              href := id.href,
               clz - "nav-link",
-              name
+              title
             )
           )
       }
@@ -125,7 +129,7 @@ object Docs
       .getElementById("main")
       .innerHTML =
       div(
-        html.compile(skipLevels = 2): _*
+        rendered.compile
       )
       .render
 

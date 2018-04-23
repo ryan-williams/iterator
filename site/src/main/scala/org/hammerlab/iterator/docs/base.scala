@@ -104,7 +104,7 @@ trait base
 
   import Elem._
 
-  def c3(name: String) = dsl.h(name, code(name))
+  def c3(name: String) = h(name, code(name))
 
   val github = s"https://github.com"
 
@@ -117,7 +117,7 @@ trait base
     )
 
   def pkg(body: Elem*)(implicit name: sourcecode.Enclosing): Section =
-    dsl.h(
+    h(
       Id(
         name
           .value
@@ -126,6 +126,6 @@ trait base
           .drop(1)
           .head
       ),
-      body: _*
+      body
     )
 }
