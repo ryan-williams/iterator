@@ -30,8 +30,8 @@ object start
        with stdlib
        with stdlib2 {
     val ! =
-      h(
-        dsl.h(
+      pkg(
+        h(
           'bulk,
           title = t"Buffered {${'take}, ${'drop}, ${'collect}}${'while}"
         ),
@@ -57,7 +57,7 @@ object start
             Iterator(9, 10)
           )
         ),
-        dsl.h(
+        h(
           'eager,
           title = t"Eager ${'take}, ${'drop}"
         ),
@@ -97,7 +97,7 @@ object start
           )
         ),
         p"See ${issue('scala, 'bug, 9247, 308218901)} for more information",
-        dsl.h('head, t"{${'head},${'next}}${'Option}"),
+        h('head, t"{${'head},${'next}}${'Option}"),
         fence(
           example(
             Iterator(1, 2, 3, 4).buffered.headOption,

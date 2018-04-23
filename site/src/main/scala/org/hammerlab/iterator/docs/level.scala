@@ -24,7 +24,7 @@ object level
     implicit val cmpIt: Cmp[Iterator[Int]] = Cmp((l, r) ⇒ (l != r) ? "!=")
 
     val ! =
-      h(
+      pkg(
         p"Flatten a nested iterator but retain access to a cursor into unflattened version:",
         fence(
           setup,

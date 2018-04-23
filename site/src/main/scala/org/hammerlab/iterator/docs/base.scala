@@ -99,7 +99,8 @@ trait base
     with hammerlab.iterator.all
     with cats.instances.AllInstances
     with section
-    with fence.utils {
+    with fence.utils
+    with Elem.dsl {
 
   import Elem._
 
@@ -115,9 +116,7 @@ trait base
       s"$org/$repo#$issue"
     )
 
-  val dsl = Elem.dsl
-
-  def h(body: Elem*)(implicit name: sourcecode.Enclosing): Section =
+  def pkg(body: Elem*)(implicit name: sourcecode.Enclosing): Section =
     dsl.h(
       Id(
         name

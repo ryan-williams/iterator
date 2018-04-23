@@ -132,7 +132,7 @@ object Docs
           Iterator(1→2, 2→1, 1→1, 7→3)
         )
       ),
-      p"To use this library, add this to ${"build.sbt"}:",
+      p"To use, add this to ${"build.sbt"}:",
       pre(
         code(
           Seq(
@@ -143,7 +143,8 @@ object Docs
           .mkString("\n")
         )
       ),
-      p"Examples by package:"
+      p"The wildcard ${"import hammerlab.iterator._"} above brings all functionality into scope.",
+      p"Individual packages can also be imported via e.g. ${"import hammerlab.iterator.sliding._"}."
     )
 
   val html =
@@ -151,7 +152,12 @@ object Docs
       'iterators,
       github.link('iterators),
       intro,
-      sections
+      dsl.h(
+        'examples,
+        "Examples",
+        p"Grouped by package:",
+        sections
+      )
     )
 
   val menu =
@@ -177,7 +183,7 @@ object Docs
       .getElementById("main")
       .innerHTML =
       div(
-        html.compile: _*
+        html.compile(skipLevels = 2): _*
       )
       .render
 

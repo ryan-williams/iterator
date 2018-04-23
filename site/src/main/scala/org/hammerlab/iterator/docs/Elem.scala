@@ -48,7 +48,9 @@ object Elem {
       )
 
     def compile: Seq[Modifier] = compile()
-    def compile(level: Int = 1, parent: Option[Id] = None, skipFirstId: Boolean = true): Seq[Modifier] = {
+    def compile(level: Int = 1,
+                parent: Option[Id] = None,
+                skipLevels: Int = 1): Seq[Modifier] = {
       val id = parent.fold { this.id } { _ + this.id }
 
       val header =
@@ -87,8 +89,8 @@ object Elem {
             case s: Section ⇒
               s.compile(
                 level + 1,
-                (!skipFirstId) ? id,
-                skipFirstId = false
+                (level > skipLevels) ? id,
+                skipLevels = skipLevels
               )
           }
           .toList
@@ -107,8 +109,9 @@ object Elem {
 
   implicit def fromModifier(m: Modifier): Elem = Tag(m)
 
-  object dsl {
+  trait dsl {
     def h(id: Id, elems: Elem*) = Section(id, id, id: String, elems)
     def h(id: Id, title: Modifier, elems: Elem*) = Section(id, id, title, elems)
   }
+  object dsl extends dsl
 }

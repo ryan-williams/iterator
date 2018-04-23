@@ -21,7 +21,7 @@ object ordering
       with either.setup
       with view {
     val ! =
-      h(
+      pkg(
         p"A variety of merge operations are available for sequences that are mutually ordered (possibly with respect to some 3rd type that each of their elements can be converted to).",
         c3('eitherMerge),
         p"Merge two ordered sequences using ${'Either}s to preserve provenance (or handle the case that the sequences' elements are not the same type):",
@@ -46,7 +46,7 @@ object ordering
             Iterator(1, 2, 3, 3, 4, 5, 6)
           )
         ),
-        h3("Merging with a 3rd type"),
+        h("Merging with a 3rd type"),
         p"Instances of the ${'View} type-class let merges use a type other than that of the elements being merged:",
         fence(
           view,

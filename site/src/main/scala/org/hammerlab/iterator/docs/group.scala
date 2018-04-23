@@ -3,7 +3,7 @@ package org.hammerlab.iterator.docs
 object group
   extends base {
   val ! =
-    h(
+    pkg(
       c3('groupRuns),
       p"Group runs of elements that satisfy a predicate or equivalence relation:",
       fence(

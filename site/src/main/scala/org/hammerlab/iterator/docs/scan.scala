@@ -13,7 +13,7 @@ object scan
     )
 
   val ! =
-    h(
+    pkg(
       p"Scans, in terms of $catsMonoidLink, that include the final total/sum ${i('xor)} the initial zero / empty-value:",
       fence(
         Setup("import hammerlab.monoid._  // some Monoid defaults"),

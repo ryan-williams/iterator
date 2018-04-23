@@ -17,7 +17,7 @@ object either
     extends base
        with setup {
     val ! =
-      h(
+      pkg(
         fence(
           setup,
           example(

@@ -17,7 +17,7 @@ object end
     extends base
        with setup {
     val ! =
-      h(
+      pkg(
         c3('finish),
         p"Run a closure when an iterator is finished traversing:",
         fence(
