@@ -38,73 +38,15 @@ object Docs
 
   import scalatags.Text.all._
 
-  def badge(url: URL, alttext: String, image: URL) =
-    a(
-      clz - 'badge,
-      href := url,
-       alt := alttext,
-      img(
-        src := image
-      )
-    )
-
   import build_info.iterator.{ organization, name, version, githubUser, githubRepo, modName }
-
-  object github {
-    val user = githubUser.get
-    val repo = githubRepo.get
-    val badge =
-      img(
-        clz - "github-badge",
-        src := "./github.svg",
-        alt := "Github Logo",
-        title := "Github Logo"
-      )
-
-    def link(children: Modifier*) =
-      a(
-        href := s"https://github.com/$user/$repo",
-        children,
-        badge
-      )
-  }
-
-  import github._
-
-  object travis {
-    val domain = "https://travis-ci.org"
-    val base = s"$domain/$user/$repo"
-
-    def apply() =
-      badge(
-        URL(base),
-        "Build Status",
-        URL(s"$base.svg?branch=master")
-      )
-  }
-
-  object coveralls {
-    val domain = "https://coveralls.io"
-    def apply() =
-      badge(
-        URL(s"$domain/github/$user/$repo"),
-        "Coverage Status",
-        URL(s"$domain/repos/github/$user/$repo/badge.svg")
-      )
-  }
-
-  object mavenCentral {
-    def apply() =
-      badge(
-        URL(s"http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22$organization%22%20AND%20a%3A%22$modName%22"),
-        "Maven Central",
-        URL(s"https://img.shields.io/maven-central/v/$organization/$modName.svg?maxAge=1800")
-      )
-  }
 
   import hammerlab.iterator._
   import hammerlab.cmp.first._
   import cats.implicits.catsKernelStdOrderForInt
+
+  implicit val github = GitHub(githubUser.get, githubRepo.get)
+  implicit val mavenCoords = MavenCoords(organization, name, modName)
+  import badge.{ travis, coveralls, mavenCentral }
 
   val intro =
     List[Elem](
@@ -150,7 +92,7 @@ object Docs
   val html =
     dsl.h(
       'iterators,
-      github.link('iterators),
+      badge.github.link('iterators),
       intro,
       dsl.h(
         'examples,
