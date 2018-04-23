@@ -59,3 +59,9 @@ h4 {
 .nav-item {
   width: 100%;
 }
+
+.github-badge {
+  height: 1.05em;
+  padding-left: 0.3em;
+  padding-bottom: 0.18em;
+}

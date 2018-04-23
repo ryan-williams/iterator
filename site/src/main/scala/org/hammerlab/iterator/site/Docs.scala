@@ -50,40 +50,47 @@ object Docs
 
   import build_info.iterator.{ organization, githubUser, githubRepo, modName }
 
+  object github {
+    val user = githubUser.get
+    val repo = githubRepo.get
+    val badge =
+      img(
+        clz - "github-badge",
+        src := "./github.svg",
+        alt := "Github Logo",
+        title := "Github Logo"
+      )
+
+    def link(children: Modifier*) =
+      a(
+        href := s"https://github.com/$user/$repo",
+        children,
+        badge
+      )
+  }
+
+  import github._
+
   object travis {
     val domain = "https://travis-ci.org"
-
-    val base =
-      for {
-        user ← githubUser
-        repo ← githubRepo
-      } yield
-        s"$domain/$user/$repo"
+    val base = s"$domain/$user/$repo"
 
     def apply() =
-      base
-        .map {
-          base ⇒
-            badge(
-              URL(base),
-              "Build Status",
-              URL(s"$base.svg?branch=master")
-            )
-        }
+      badge(
+        URL(base),
+        "Build Status",
+        URL(s"$base.svg?branch=master")
+      )
   }
 
   object coveralls {
     val domain = "https://coveralls.io"
     def apply() =
-      for {
-        user ← githubUser
-        repo ← githubRepo
-      } yield
-        badge(
-          URL(s"$domain/github/$user/$repo"),
-          "Coverage Status",
-          URL(s"$domain/repos/github/$user/$repo/badge.svg")
-        )
+      badge(
+        URL(s"$domain/github/$user/$repo"),
+        "Coverage Status",
+        URL(s"$domain/repos/github/$user/$repo/badge.svg")
+      )
   }
 
   object mavenCentral {
@@ -131,6 +138,7 @@ object Docs
   val html =
     dsl.h(
       'iterators,
+      github.link('iterators),
       (
         intro ++
         sections
