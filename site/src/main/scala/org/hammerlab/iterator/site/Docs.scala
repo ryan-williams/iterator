@@ -48,7 +48,7 @@ object Docs
       )
     )
 
-  import build_info.iterator.{ organization, githubUser, githubRepo, modName }
+  import build_info.iterator.{ organization, name, version, githubUser, githubRepo, modName }
 
   object github {
     val user = githubUser.get
@@ -132,6 +132,17 @@ object Docs
           Iterator(1→2, 2→1, 1→1, 7→3)
         )
       ),
+      p"To use this library, add this to ${"build.sbt"}:",
+      pre(
+        code(
+          Seq(
+            "libraryDependencies += \"%s\"  %%%% \"%s\" %% \"%s\"".format(organization, name, version),
+            "// For ScalaJS:",
+            "libraryDependencies += \"%s\" %%%%%% \"%s\" %% \"%s\"".format(organization, name, version)
+          )
+          .mkString("\n")
+        )
+      ),
       p"Examples by package:"
     )
 
@@ -139,10 +150,8 @@ object Docs
     dsl.h(
       'iterators,
       github.link('iterators),
-      (
-        intro ++
-        sections
-      ): _*
+      intro,
+      sections
     )
 
   val menu =

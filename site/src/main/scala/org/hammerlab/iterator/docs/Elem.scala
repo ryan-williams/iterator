@@ -1,9 +1,10 @@
 package org.hammerlab.iterator.docs
 
 import hammerlab.option._
+
 import scalatags.Text.all
 import scalatags.Text.all._
-import scalatags.text
+import scalatags.{ Text, text }
 
 sealed trait Elem {
   def compile: Seq[Modifier]
@@ -21,6 +22,11 @@ object Elem {
     implicit def symbolToAttrValue(implicit av: AttrValue[String]): AttrValue[Id] =
       (t: text.Builder, a: Attr, v: Id) ⇒ av(t, a, v.toString)
   }
+
+  case class Elems(value: Seq[Elem]) extends Elem {
+    override def compile: Seq[Modifier] = value.flatMap(_.compile)
+  }
+  implicit def wrapMultiple(elems: Seq[Elem]): Elems = Elems(elems)
 
   case class Section(id: Id,
                      name: String,
@@ -72,6 +78,10 @@ object Elem {
 
       val children =
         elems
+          .flatMap {
+            case Elems(elems) ⇒ elems
+            case e ⇒ Seq(e)
+          }
           .flatMap {
             case Tag(m) ⇒ Seq(m)
             case s: Section ⇒
