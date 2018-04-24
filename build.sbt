@@ -2,7 +2,10 @@
 default(
   scalacOptions += "-Yrangepos",
   testSuiteVersion := "1.0.0".snapshot,
-  testUtilsVersion := "1.0.1".snapshot
+  testUtilsVersion := "1.0.1".snapshot,
+  versions(
+    scalatags → "0.6.8".snapshot
+  )
 )
 
 lazy val core =

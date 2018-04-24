@@ -1,13 +1,15 @@
 package org.hammerlab.iterator.site
 
-import org.hammerlab.iterator.docs.{ URL, attr_dsl, symbol }
-
-import scalatags.Text.all._
+import org.hammerlab.iterator.docs.{ URL, attr_dsl, module, symbol }
 
 package object badge
   extends attr_dsl
      with symbol
      with URL.utils {
+
+  self: module ⇒
+  import b.all._
+
   def badge(url: URL,
             alttext: String,
             image: URL) =
@@ -53,6 +55,8 @@ package object badge
   }
 
   object github {
+    val domain = s"https://github.com"
+
     val badge =
       img(
         clz - "github-badge",
@@ -64,10 +68,18 @@ package object badge
     def link(children: Modifier*)(implicit gh: GitHub) = {
       import gh._
       a(
-        href := s"https://github.com/$user/$repo",
+        href := s"$domain/$user/$repo",
         children,
         badge
       )
     }
+
+    // Link to a github issue
+    def issue(org: String, repo: String, issue: Int, comment: Int): Modifier = this.issue(org, repo, issue, Some(comment))
+    def issue(org: String, repo: String, issue: Int, comment: Option[Int] = None): Modifier =
+      a(
+        href := s"$domain/$org/$repo/issues/$issue${comment.fold("")(c ⇒ s"#issuecomment-$c")}",
+        s"$org/$repo#$issue"
+      )
   }
 }

@@ -74,3 +74,20 @@ h4 {
   padding-left: 0.3em;
   padding-bottom: 0.18em;
 }
+
+.nav-pills > .nav-link {
+  width: 100%;
+}
+
+.nav-link-2 {
+  margin-left: 0.5em;
+}
+
+.closed {
+  display: none;
+  visibility: hidden;
+}
+.closed > .nav-link {
+  display: none;
+  visibility: hidden;
+}

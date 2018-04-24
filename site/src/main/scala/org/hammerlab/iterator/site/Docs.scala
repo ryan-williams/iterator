@@ -6,18 +6,30 @@ import org.hammerlab.docs.block
 import org.hammerlab.iterator.docs._
 import org.scalajs.dom.document
 
+import scala.collection.mutable
 import scala.scalajs.js.annotation.JSExportTopLevel
+
+trait sections {
+  self: base ⇒
+  import Elem._
+  val sections = mutable.ArrayBuffer[Section]()
+}
 
 @JSExportTopLevel("hammerlab.iterators.docs")
 object Docs
-  extends scalatags.Text.Cap
+  extends Mod(scalatags.Text)
+     with sections
      with fence.utils
      with interp
      with symbol
      with URL.utils
      with attr_dsl
      with Example.make
-     with Elem.dsl {
+     with elem
+     with module
+     with count {
+
+  import Elem._
 
   val sections =
     List(
@@ -34,14 +46,11 @@ object Docs
       start,
       util
     )
-    .map(_ !)
 
   import build_info.iterator.{ githubRepo, githubUser, modName, name, organization, version }
   import cats.implicits.catsKernelStdOrderForInt
   import hammerlab.cmp.first._
   import hammerlab.iterator._
-
-  import scalatags.Text.all._
 
   implicit val github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)
@@ -96,32 +105,55 @@ object Docs
       intro,
       h(
         'examples,
-        "Examples",
+        title = "Examples",
         p"Grouped by package:",
         sections
       )
     )
 
-  val rendered = Tree.Section(html)
+  val rendered = Tree.Section(html).reduceIds
 
   val menu =
-    li(
-      clz - "sidebar-brand",
-      "Packages:"
+    a(
+      href := "#iterators",
+      clz - "nav-link",
+      "Intro"
     ) ::
     rendered
       .children
       .toList
-      .collect {
+      .flatMap {
         case Tree.Section(id, title, elems) ⇒
-          li(
-            clz - "nav-item",
-            a(
-              href := id.href,
-              clz - "nav-link",
-              title
+          span(
+            href := id.href,
+            onclick := "function() => { console.log('yay') }",
+            clz - "nav-link",
+            title
+          ) ::
+          (
+            (
+              elems
+                .toList
+                .collect {
+                  case Tree.Section(id, title, elems) ⇒
+                    a(
+                      href := id.href,
+                      clz - "nav-link nav-link-2",
+                      title
+                    )
+                } match {
+                  case Nil ⇒ Nil
+                  case children ⇒
+                    List(
+                      span(
+                        //clz - 'closed,
+                        children
+                      )
+                    )
+                }
             )
           )
+        case _ ⇒ Nil
       }
 
   def main(args: Array[String]): Unit = {
@@ -134,7 +166,7 @@ object Docs
       .render
 
     document
-      .getElementById("nav-list")
+      .getElementById("nav-container")
       .innerHTML =
       menu.render
   }

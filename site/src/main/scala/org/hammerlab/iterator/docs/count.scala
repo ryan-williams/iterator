@@ -1,8 +1,10 @@
 package org.hammerlab.iterator.docs
 
-object count
+trait count
   extends base {
-  val ! =
+  import b.all._
+  import hammerlab.iterator._
+  sections +=
     pkg(
       fence(
         example(
