@@ -1,8 +1,8 @@
 package org.hammerlab.iterator.docs
 
-object sliding
+trait sliding
   extends base {
-  val ! =
+  sections +=
     pkg(
       p"Windows of size 2, including an optional next or previous element:",
       fence(

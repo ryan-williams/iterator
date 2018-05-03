@@ -2,9 +2,9 @@ package org.hammerlab.iterator.docs
 
 import org.hammerlab.docs.block
 
-object util
+trait util
   extends base {
-  val ! =
+  sections +=
     pkg(
       c3('SimpleIterator), // TODO: link
       p"Interface for easily defining (buffered) ${'Iterator}s in terms of one function, ${'_advance}, that returns an ${'Option}.",

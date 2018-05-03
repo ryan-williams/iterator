@@ -7,9 +7,11 @@ import org.hammerlab.docs.Code.Setup
 
 object fence {
   trait utils
-    extends symbol {
+    extends symbol
+       with elem {
+    self: module ⇒
+    import b.all._
     type T = Elem.Tag
-    import scalatags.Text.tags.{ code, pre }
     def fence(body: Code*): T =
       pre(
         code(

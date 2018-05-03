@@ -2,9 +2,11 @@ package org.hammerlab.iterator.docs
 
 import org.hammerlab.docs.Code.Setup
 
-object scan
+trait scan
   extends base {
-  val catsMonoidLink =
+  import b.all._
+
+  def catsMonoidLink =
     code(
       a(
         href := "https://typelevel.org/cats/typeclasses/monoid.html",
@@ -12,7 +14,7 @@ object scan
       )
     )
 
-  val ! =
+  sections +=
     pkg(
       p"Scans, in terms of $catsMonoidLink, that include the final total/sum ${i('xor)} the initial zero / empty-value:",
       fence(

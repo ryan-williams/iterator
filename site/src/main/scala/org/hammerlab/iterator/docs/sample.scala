@@ -1,9 +1,9 @@
 package org.hammerlab.iterator.docs
 
-object sample
+trait sample
   extends base {
   scala.util.Random.setSeed(123)
-  val ! =
+  sections +=
     pkg(
       p"Resevoir-sample:",
       fence(

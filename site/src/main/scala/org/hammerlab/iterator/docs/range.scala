@@ -1,14 +1,13 @@
 package org.hammerlab.iterator.docs
 
-import org.hammerlab.docs
 import org.hammerlab.docs.Code.{ Comment, Setup }
 
-object range
+trait range
   extends base {
 
   import hammerlab.iterator.range._
 
-  val ! =
+  sections +=
     pkg(
       c3('sliceOpt),
       p"Select index-ranges from an iterator where the arguments can be options:",

@@ -2,8 +2,6 @@ package org.hammerlab.iterator.docs
 
 trait count
   extends base {
-  import b.all._
-  import hammerlab.iterator._
   sections +=
     pkg(
       fence(

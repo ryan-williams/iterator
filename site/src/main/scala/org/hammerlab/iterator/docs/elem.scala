@@ -16,7 +16,7 @@ trait elem {
       implicit def fromSymbol(s: Symbol) = Id(s.toString.drop(1))
       implicit def unwrap(id: Id): String = id.toString
       implicit def symbolToAttrValue(implicit av: AttrValue[String]): AttrValue[Id] =
-        (t: Builder, a: Attr, v: Id) ⇒ av(t, a, v.toString)
+        (t: B, a: Attr, v: Id) ⇒ av(t, a, v.toString)
     }
 
     case class Section(id: Id,

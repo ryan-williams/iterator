@@ -1,8 +1,8 @@
 package org.hammerlab.iterator.docs
 
-object group
+trait group
   extends base {
-  val ! =
+  sections +=
     pkg(
       c3('groupRuns),
       p"Group runs of elements that satisfy a predicate or equivalence relation:",

@@ -11,39 +11,46 @@ trait module {
   type B
   type O <: F
   type F
-  type Builder = B
-  type Output = O
-  type FragT = F
   implicit val b: Bundle[B, O, F]
 }
 
-abstract class Mod[B, O <: F, F](override implicit val b: Bundle[B, O, F])
-  extends module
+abstract class Mod[_B, _O <: _F, _F, _Bundle <: Bundle[_B, _O, _F]](_b: _Bundle)
+  extends module {
+  override type B = _B
+  override type O = _O
+  override type F = _F
+  override implicit val b = _b
+}
 
 trait attr_dsl {
   self: module ⇒
   import b.all._
   object clz {
-    def -(value: String) = `class` := value
+    def -(value: String): Modifier = `class` := value
   }
+
+  def by[From, To](fn: From ⇒ To)(implicit av: AttrValue[To]): AttrValue[From] =
+    (t: B, a: Attr, v: From) ⇒ av(t, a, fn(v))
+
+  implicit def by[From, To](implicit av: AttrValue[To], fn: From ⇒ To): AttrValue[From] =
+    (t: B, a: Attr, v: From) ⇒ av(t, a, fn(v))
 }
 
-trait symbol {
+trait symbol
+  extends attr_dsl {
   self: module ⇒
   import b.all._
   implicit def symbolToString(s: Symbol): String = s.toString.drop(1)
   implicit def symbolToTextModifier(s: Symbol): Modifier = s.toString.drop(1)
-  implicit def symbolToAttrValue(implicit av: AttrValue[String]): AttrValue[Symbol] =
-    (t: Builder, a: Attr, v: Symbol) ⇒ av(t, a, v)
 }
 
 case class URL(value: String)
 object URL {
-  trait utils {
+  trait utils
+    extends attr_dsl {
     self: module ⇒
     import b.all._
-    implicit def urlToAttrValue(implicit av: AttrValue[String]): AttrValue[URL] =
-      (t: Builder, a: Attr, v: URL) ⇒ av(t, a, v.value)
+    implicit val urlToAttrValue: AttrValue[URL] = by(_.value)
   }
 }
 
@@ -91,20 +98,25 @@ trait interp
   }
 }
 
+trait section {
+  self: elem ⇒
+  def ! : Elem.Section
+}
+
 trait Pkg {
   self: elem with module ⇒
   import Elem._
   import b.all._
 
-  def pkg(body: Elem*)(implicit name: sourcecode.Enclosing): Section =
+  def pkg(body: Elem*)(implicit name: sourcecode.FullName): Section =
     h(
       Id(
         name
-        .value
-        .split("\\.")
-        .dropWhile(_ != "docs")
-        .drop(1)
-        .head
+          .value
+          .split("\\.")
+          .dropWhile(_ != "docs")
+          .drop(1)
+          .head
       ),
       body
     )

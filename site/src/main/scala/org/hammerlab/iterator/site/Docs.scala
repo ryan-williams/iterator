@@ -4,6 +4,7 @@ import hammerlab.show._
 import org.hammerlab.docs.Code.Example
 import org.hammerlab.docs.block
 import org.hammerlab.iterator.docs._
+import org.scalajs.dom
 import org.scalajs.dom.document
 
 import scala.collection.mutable
@@ -17,8 +18,7 @@ trait sections {
 
 @JSExportTopLevel("hammerlab.iterators.docs")
 object Docs
-  extends Mod(scalatags.Text)
-     with sections
+  extends sections
      with fence.utils
      with interp
      with symbol
@@ -26,35 +26,36 @@ object Docs
      with attr_dsl
      with Example.make
      with elem
+     with tree
      with module
-     with count {
+     with count
+     with either
+     with end
+     with group
+     with level
+     with ordering
+     with range
+     with sample
+     with scan
+     with sliding
+     with start
+     with util
+     with badge {
 
+  type B = dom.Element
+  type O = dom.Element
+  type F = dom.Node
+  implicit val b = scalatags.JsDom
+
+  import b.all._
   import Elem._
 
-  val sections =
-    List(
-      count,
-      either,
-      end,
-      group,
-      level,
-      ordering,
-      range,
-      sample,
-      scan,
-      sliding,
-      start,
-      util
-    )
-
   import build_info.iterator.{ githubRepo, githubUser, modName, name, organization, version }
-  import cats.implicits.catsKernelStdOrderForInt
   import hammerlab.cmp.first._
   import hammerlab.iterator._
 
-  implicit val github = GitHub(githubUser.get, githubRepo.get)
+  implicit val _github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)
-  import badge.{ coveralls, mavenCentral, travis }
 
   val intro =
     List[Elem](
@@ -100,8 +101,8 @@ object Docs
 
   val html =
     h(
-      'iterators,
-      badge.github.link('iterators),
+      id = 'iterators,
+      title = github.link('iterators),
       intro,
       h(
         'examples,
@@ -126,48 +127,40 @@ object Docs
         case Tree.Section(id, title, elems) ⇒
           span(
             href := id.href,
-            onclick := "function() => { console.log('yay') }",
+            onclick := {
+              () ⇒ {
+              }
+            },
             clz - "nav-link",
             title
           ) ::
-          (
-            (
-              elems
-                .toList
-                .collect {
-                  case Tree.Section(id, title, elems) ⇒
-                    a(
-                      href := id.href,
-                      clz - "nav-link nav-link-2",
-                      title
-                    )
-                } match {
-                  case Nil ⇒ Nil
-                  case children ⇒
-                    List(
-                      span(
-                        //clz - 'closed,
-                        children
-                      )
-                    )
-                }
-            )
-          )
+          elems
+            .toList
+            .collect {
+              case Tree.Section(id, title, elems) ⇒
+                a(
+                  href := id.href,
+                  clz - "nav-link nav-link-2",
+                  title
+                )
+            }
         case _ ⇒ Nil
       }
 
   def main(args: Array[String]): Unit = {
     document
       .getElementById("main")
-      .innerHTML =
-      div(
-        rendered.compile
+      .appendChild(
+        div(
+          rendered.compile
+        )
+        .render
       )
-      .render
 
     document
       .getElementById("nav-container")
-      .innerHTML =
-      menu.render
+      .appendChild(
+        menu.render
+      )
   }
 }
