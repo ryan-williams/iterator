@@ -1,32 +1,23 @@
 package org.hammerlab.iterator.site
 
 import hammerlab.show._
-import org.hammerlab.docs.Code.Example
+import org.hammerlab.docs.Code.{ Example, Setup }
 import org.hammerlab.docs.block
 import org.hammerlab.iterator.docs._
 import org.hammerlab.iterator.site.Menu.Item
 import org.scalajs.dom.document.getElementById
+import markdown.dsl._
+import org.hammerlab.iterator.docs.markdown.Elem.Fence
+import org.hammerlab.lines.Lines
+import org.hammerlab.test.Cmp
 
-import scala.collection.mutable
 import scala.scalajs.js.annotation.JSExportTopLevel
-
-import japgolly.scalajs.react.vdom.html_<^._, <._
-
-trait sections {
-  self: base ⇒
-  import Elem._
-  val sections = mutable.ArrayBuffer[Section]()
-}
 
 @JSExportTopLevel("hammerlab.iterators.docs")
 object Docs
-  extends sections
-     with fence.utils
-     with interp
+  extends interp
      with symbol
-     with attr_dsl
      with Example.make
-     with count
 //     with either
 //     with end
 //     with group
@@ -40,19 +31,21 @@ object Docs
 //     with util
      with badge {
 
-  import Elem._
-
   import build_info.iterator.{ githubRepo, githubUser, modName, name, organization, version }
   import hammerlab.cmp.first._
   import hammerlab.iterator._
 
+  import cats.instances.   int.catsKernelStdOrderForInt
+
+  implicitly[Cmp[Int]]
+  implicitly[Cmp[Option[Int]]]
+
   implicit val _github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)
 
-  import <.{p, pre, code, span}
-
   val intro =
-    List[Tag](
+    section(
+      'iterators,
       p(
         travis(),
         coveralls(),
@@ -78,15 +71,12 @@ object Docs
         )
       ),
       p"To use, add this to ${"build.sbt"}:",
-      pre(
-        code(
-          Seq(
-            "libraryDependencies += \"%s\"  %%%% \"%s\" %% \"%s\"".format(organization, name, version),
-            "",
-            "// For ScalaJS:",
-            "libraryDependencies += \"%s\" %%%%%% \"%s\" %% \"%s\"".format(organization, name, version)
-          )
-          .mkString("\n")
+      Fence(
+        Lines(
+          "libraryDependencies += \"%s\"  %%%% \"%s\" %% \"%s\"".format(organization, name, version),
+          "",
+          "// For ScalaJS:",
+          "libraryDependencies += \"%s\" %%%%%% \"%s\" %% \"%s\"".format(organization, name, version)
         )
       ),
       p"The wildcard ${"import hammerlab.iterator._"} above brings all functionality into scope.",
@@ -100,42 +90,39 @@ object Docs
 */
 
   val html =
-    h(
-      id = 'iterators,
-      title = github.link('iterators),
-      //intro,
-      h(
-        'examples,
-        title = span("Examples"),
-        p"Grouped by package:",
-        sections
+    section(
+      github.badge,
+      intro,
+      section(
+        "Examples",
+        p"Grouped by package:"
       )
     )
 
-  val rendered = Tree.Section(html).reduceIds
+  //val rendered = Tree.Section(html).reduceIds
 
-  val menu =
-    Menu(
-      Item(
-        "iterators",
-        span("Intro")
-      ) ::
-      rendered
-        .children
-        .collect {
-          case s: Tree.Section ⇒
-            Item(s)
-        }
-        .toList
-    )
+//  val menu =
+//    Menu(
+//      Item(
+//        "iterators",
+//        span("Intro")
+//      ) ::
+//      rendered
+//        .children
+//        .collect {
+//          case s: Tree.Section ⇒
+//            Item(s)
+//        }
+//        .toList
+//    )
 
   def main(args: Array[String]): Unit = {
-    rendered.compile.renderIntoDOM(
-      getElementById("main")
-    )
+//    rendered.compile.renderIntoDOM(
+//      getElementById("main")
+//    )
 
-    menu.renderIntoDOM(
-      getElementById("nav-container")
-    )
+//    menu.renderIntoDOM(
+//      getElementById("nav-container")
+//    )
   }
 }

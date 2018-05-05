@@ -3,96 +3,80 @@ package org.hammerlab.iterator.docs
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code.Example
-import org.hammerlab.iterator.site.sections
-import japgolly.scalajs.react.vdom.html_<^._
-import <._, ^._
-import japgolly.scalajs.react.vdom.TagOf
-import org.scalajs.dom.html
-
-trait attr_dsl {
-  object clz {
-    def -(value: String): TagMod = `class` := value
-  }
-}
+import org.hammerlab.iterator.docs.markdown.Elem.P
+import org.hammerlab.iterator.docs.markdown.{ Inline, Section }
+import org.hammerlab.iterator.docs.markdown.Inline.Plain.{ Code, Text }
 
 trait symbol {
   implicit def symbolToString(s: Symbol): String = s.toString.drop(1)
-  implicit def symbolToTextModifier(s: Symbol): VdomNode = s.toString.drop(1)
+  implicit def symbolToTextModifier(s: Symbol): Text = Text(s.toString.drop(1))
 }
 
-case class URL(value: String)
+case class URL(value: String) {
+  override def toString: String = value
+  def /(segment: String): URL = URL(s"$value/$segment")
+}
 
 trait interp
   extends symbol {
 
-  case class Arg(m: VdomElement)
+  case class Arg(value: Inline)
   object Arg {
-    implicit def   string(s:   String): Arg = Arg(code(s))
-    implicit def   symbol(s:   Symbol): Arg = Arg(code(s))
-    implicit def modifier(m: TagOf[html.Element]): Arg = Arg(m)
-    implicit def unwrap(a: Arg): VdomElement = a.m
+    implicit def   string(value: String): Arg = Arg(Code(value))
+    implicit def   symbol(value: Symbol): Arg = Arg(Code(value))
+    implicit def modifier(value: Inline): Arg = Arg(value)
+    implicit def unwrap(a: Arg): Inline = a.value
   }
 
   implicit class CodeContext(sc: StringContext) {
-    def t(args: Arg*): Elem.Tag = {
+    def t(args: Arg*): List[Inline] = {
       val strings =
         sc
           .parts
           .iterator
-          .map{ span(_) }
+          .map{ Text(_) }
 
         (
-          (strings.next: VdomNode) ::
+          (strings.next) ::
           args
             .iterator
             .zip(strings)
             .flatMap {
               case (arg, string) ⇒
-                Iterator[VdomNode](
-                  arg: VdomNode,
+                Iterator(
+                  arg.value,
                   string
                 )
             }
             .toList
         )
-        .toVdomArray
     }
 
-    def p(args: Arg*) = <.p(t(args: _*).value)
+    def p(args: Arg*) = P(t(args: _*))
   }
 }
 
-trait section {
-  def ! : Elem.Section
-}
-
 trait Pkg {
-  import Elem._
 
-  def pkg(body: Elem*)(implicit name: sourcecode.FullName): Section =
-    h(
-      Id(
-        name
-          .value
-          .split("\\.")
-          .dropWhile(_ != "docs")
-          .drop(1)
-          .head
-      ),
+  def pkg(body: markdown.Elem*)(implicit name: sourcecode.FullName): Section =
+    Section(
+      name
+        .value
+        .split("\\.")
+        .dropWhile(_ != "docs")
+        .drop(1)
+        .head,
       body
     )
 
-  def c3(name: String) = h(name, title = code(name))
+  def c3(name: String) = Section(Code(name))
 }
 
 trait base
   extends Example.make
      with symbol
      with interp
-     with attr_dsl
      with hammerlab.cmp.first
      with hammerlab.iterator.all
      with cats.instances.AllInstances
-     with fence.utils
      with Pkg
-     with sections

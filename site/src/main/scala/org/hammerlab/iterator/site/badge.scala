@@ -1,18 +1,16 @@
 package org.hammerlab.iterator.site
 
 import japgolly.scalajs.react.vdom.Attr.ValueType
-import japgolly.scalajs.react.vdom.TagOf
-import japgolly.scalajs.react.vdom.html_<^.<._
-import japgolly.scalajs.react.vdom.html_<^.^._
-import japgolly.scalajs.react.vdom.html_<^._
-import org.hammerlab.iterator.docs.{ URL, attr_dsl, symbol }
-import org.scalajs.dom.html
+import org.hammerlab.iterator.docs.markdown.Inline.Plain.Text
+import org.hammerlab.iterator.docs.markdown.Inline.{ A, Img }
+import org.hammerlab.iterator.docs.markdown.Opt
+import org.hammerlab.iterator.docs.markdown.Opt.Non
+import org.hammerlab.iterator.docs.{ URL, symbol }
 
 import scala.scalajs.js
 
 trait badge
-  extends attr_dsl
-     with symbol {
+  extends symbol {
 
   implicit def urlToJS(url: URL): js.Any = url.value
   implicit val urlValue: ValueType[URL, String] = ValueType.byImplicit
@@ -20,34 +18,32 @@ trait badge
   def badge(url: URL,
             alttext: String,
             image: URL) =
-    a(
-      clz - 'badge,
-      href := url,
-      alt := alttext,
-      img(
-        src := image
-      )
+    Img(
+      src = image,
+      href = url,
+      alt = alttext,
+      clz = 'badge
     )
 
   def travis()(implicit gh: GitHub) = {
-    val domain = "https://travis-ci.org"
-    val base = s"$domain/${gh.user}/${gh.repo}"
+    val domain = URL("https://travis-ci.org")
+    val base = domain / gh.user / gh.repo
 
     badge(
-      URL(base),
+      base,
       "Build Status",
       URL(s"$base.svg?branch=master")
     )
   }
 
   object coveralls {
-    val domain = "https://coveralls.io"
+    val domain = URL("https://coveralls.io")
     def apply()(implicit gh: GitHub) = {
       import gh._
       badge(
-        URL(s"$domain/github/$user/$repo"),
+        domain/'github/user/repo,
         "Coverage Status",
-        URL(s"$domain/repos/github/$user/$repo/badge.svg")
+        domain/'repos/'github/user/repo/"badge.svg"
       )
     }
   }
@@ -62,31 +58,26 @@ trait badge
   }
 
   object github {
-    val domain = s"https://github.com"
+    val domain = URL("https://github.com")
 
-    val badge =
-      img(
-        clz - "github-badge",
-        src := "./github.svg",
-        alt := "Github Logo",
-        title := "Github Logo"
-      )
-
-    def link(children: VdomNode*)(implicit gh: GitHub) = {
+    def badge(implicit gh: GitHub) = {
       import gh._
-      a(
-        href := s"$domain/$user/$repo",
-        children.toVdomArray,
-        badge
+      Img(
+         src = URL(".") / "github.svg",
+         alt = "Github Logo",
+        href = domain / user / repo,
+         clz = "github-badge"
       )
     }
 
     // Link to a github issue
-    def issue(org: String, repo: String, issue: Int, comment: Int): TagOf[html.Anchor] = this.issue(org, repo, issue, Some(comment))
-    def issue(org: String, repo: String, issue: Int, comment: Option[Int] = None): TagOf[html.Anchor] =
-      a(
-        href := s"$domain/$org/$repo/issues/$issue${comment.fold("")(c ⇒ s"#issuecomment-$c")}",
-        s"$org/$repo#$issue"
+    def issue(org: String,
+              repo: String,
+              issue: Int,
+              comment: Opt[Int] = Non) =
+      A(
+        Seq(Text(s"$org/$repo#$issue")),
+        domain / org / repo / 'issues / s"$issue${comment.fold("")(c ⇒ s"#issuecomment-$c")}"
       )
   }
 }

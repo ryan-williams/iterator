@@ -87,7 +87,13 @@ lazy val site =
   project
     .settings(
       scala212Only,
-      scalajs.react,
+      dep(
+        scalajs.react_dep % "1.2.0"
+      ),
+      npmDependencies in Compile ++= Seq(
+        "react"     → "16.2.0",
+        "react-dom" → "16.2.0"
+      ),
       scalaJSUseMainModuleInitializer := true,
       dep(
         hammerlab.io % "5.0.0".snapshot,
@@ -98,7 +104,6 @@ lazy val site =
     )
     .enablePlugins(
       JS
-//      ScalaJSPlugin
     )
     .dependsOn(
         coreJS,

@@ -37,18 +37,7 @@ object Elem {
   }
   implicit class Single(val elem: Elem) extends Arg
   implicit class Multi(val elems: Seq[Elem]) extends Arg
-//  object Multi {
-//    implicit def make(elems: Seq[Elem]): Multi =
-//      Multi(
-//        elems
-//          .map {
-//            case Tag(node) ⇒
-//              node match {
-//
-//              }
-//          }
-//      )
-//  }
+
   implicit def unroll(args: Seq[Arg]): Seq[Elem] =
     args.flatMap {
       case s: Single ⇒ Seq(s.elem)
