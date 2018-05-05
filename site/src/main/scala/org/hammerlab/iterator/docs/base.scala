@@ -4,68 +4,33 @@ import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code.Example
 import org.hammerlab.iterator.site.sections
-
-import scalatags.generic._
-
-trait module {
-  type B
-  type O <: F
-  type F
-  implicit val b: Bundle[B, O, F]
-}
-
-abstract class Mod[_B, _O <: _F, _F, _Bundle <: Bundle[_B, _O, _F]](_b: _Bundle)
-  extends module {
-  override type B = _B
-  override type O = _O
-  override type F = _F
-  override implicit val b = _b
-}
+import japgolly.scalajs.react.vdom.html_<^._
+import <._, ^._
+import japgolly.scalajs.react.vdom.TagOf
+import org.scalajs.dom.html
 
 trait attr_dsl {
-  self: module ⇒
-  import b.all._
   object clz {
-    def -(value: String): Modifier = `class` := value
+    def -(value: String): TagMod = `class` := value
   }
-
-  def by[From, To](fn: From ⇒ To)(implicit av: AttrValue[To]): AttrValue[From] =
-    (t: B, a: Attr, v: From) ⇒ av(t, a, fn(v))
-
-  implicit def by[From, To](implicit av: AttrValue[To], fn: From ⇒ To): AttrValue[From] =
-    (t: B, a: Attr, v: From) ⇒ av(t, a, fn(v))
 }
 
-trait symbol
-  extends attr_dsl {
-  self: module ⇒
-  import b.all._
+trait symbol {
   implicit def symbolToString(s: Symbol): String = s.toString.drop(1)
-  implicit def symbolToTextModifier(s: Symbol): Modifier = s.toString.drop(1)
+  implicit def symbolToTextModifier(s: Symbol): VdomNode = s.toString.drop(1)
 }
 
 case class URL(value: String)
-object URL {
-  trait utils
-    extends attr_dsl {
-    self: module ⇒
-    import b.all._
-    implicit val urlToAttrValue: AttrValue[URL] = by(_.value)
-  }
-}
 
 trait interp
-  extends symbol
-     with elem {
-  self: module ⇒
-  import b.all._
+  extends symbol {
 
-  case class Arg(m: Modifier)
+  case class Arg(m: VdomElement)
   object Arg {
     implicit def   string(s:   String): Arg = Arg(code(s))
     implicit def   symbol(s:   Symbol): Arg = Arg(code(s))
-    implicit def modifier(m: Modifier): Arg = Arg(m)
-    implicit def unwrap(a: Arg): Modifier = a.m
+    implicit def modifier(m: TagOf[html.Element]): Arg = Arg(m)
+    implicit def unwrap(a: Arg): VdomElement = a.m
   }
 
   implicit class CodeContext(sc: StringContext) {
@@ -74,39 +39,35 @@ trait interp
         sc
           .parts
           .iterator
-          .map{ s ⇒ s: Modifier }
+          .map{ span(_) }
 
-      span(
         (
-          strings.next ::
+          (strings.next: VdomNode) ::
           args
             .iterator
             .zip(strings)
             .flatMap {
               case (arg, string) ⇒
-                Iterator(
-                  arg: Modifier,
+                Iterator[VdomNode](
+                  arg: VdomNode,
                   string
                 )
             }
             .toList
-        ): _*
-      )
+        )
+        .toVdomArray
     }
 
-    def p(args: Arg*): Modifier = b.tags.p(t(args: _*).value)
+    def p(args: Arg*) = <.p(t(args: _*).value)
   }
 }
 
 trait section {
-  self: elem ⇒
   def ! : Elem.Section
 }
 
 trait Pkg {
-  self: elem with module ⇒
   import Elem._
-  import b.all._
 
   def pkg(body: Elem*)(implicit name: sourcecode.FullName): Section =
     h(
@@ -121,7 +82,7 @@ trait Pkg {
       body
     )
 
-  def c3(name: String) = h(name, code(name))
+  def c3(name: String) = h(name, title = code(name))
 }
 
 trait base
@@ -133,7 +94,5 @@ trait base
      with hammerlab.iterator.all
      with cats.instances.AllInstances
      with fence.utils
-     with elem
      with Pkg
-     with module
      with sections

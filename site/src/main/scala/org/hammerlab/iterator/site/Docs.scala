@@ -4,11 +4,13 @@ import hammerlab.show._
 import org.hammerlab.docs.Code.Example
 import org.hammerlab.docs.block
 import org.hammerlab.iterator.docs._
-import org.scalajs.dom
-import org.scalajs.dom.document
+import org.hammerlab.iterator.site.Menu.Item
+import org.scalajs.dom.document.getElementById
 
 import scala.collection.mutable
 import scala.scalajs.js.annotation.JSExportTopLevel
+
+import japgolly.scalajs.react.vdom.html_<^._, <._
 
 trait sections {
   self: base ⇒
@@ -22,32 +24,22 @@ object Docs
      with fence.utils
      with interp
      with symbol
-     with URL.utils
      with attr_dsl
      with Example.make
-     with elem
-     with tree
-     with module
      with count
-     with either
-     with end
-     with group
-     with level
-     with ordering
-     with range
-     with sample
-     with scan
-     with sliding
-     with start
-     with util
+//     with either
+//     with end
+//     with group
+//     with level
+//     with ordering
+//     with range
+//     with sample
+//     with scan
+//     with sliding
+//     with start
+//     with util
      with badge {
 
-  type B = dom.Element
-  type O = dom.Element
-  type F = dom.Node
-  implicit val b = scalatags.JsDom
-
-  import b.all._
   import Elem._
 
   import build_info.iterator.{ githubRepo, githubUser, modName, name, organization, version }
@@ -57,8 +49,10 @@ object Docs
   implicit val _github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)
 
+  import <.{p, pre, code, span}
+
   val intro =
-    List[Elem](
+    List[Tag](
       p(
         travis(),
         coveralls(),
@@ -98,15 +92,21 @@ object Docs
       p"The wildcard ${"import hammerlab.iterator._"} above brings all functionality into scope.",
       p"Individual packages can also be imported via e.g. ${"import hammerlab.iterator.sliding._"}."
     )
+/*
+    .zipWithIndex
+    .map {
+      case (Tag(e), i) ⇒ Tag(e(^.key := i))
+    }
+*/
 
   val html =
     h(
       id = 'iterators,
       title = github.link('iterators),
-      intro,
+      //intro,
       h(
         'examples,
-        title = "Examples",
+        title = span("Examples"),
         p"Grouped by package:",
         sections
       )
@@ -115,52 +115,27 @@ object Docs
   val rendered = Tree.Section(html).reduceIds
 
   val menu =
-    a(
-      href := "#iterators",
-      clz - "nav-link",
-      "Intro"
-    ) ::
-    rendered
-      .children
-      .toList
-      .flatMap {
-        case Tree.Section(id, title, elems) ⇒
-          span(
-            href := id.href,
-            onclick := {
-              () ⇒ {
-              }
-            },
-            clz - "nav-link",
-            title
-          ) ::
-          elems
-            .toList
-            .collect {
-              case Tree.Section(id, title, elems) ⇒
-                a(
-                  href := id.href,
-                  clz - "nav-link nav-link-2",
-                  title
-                )
-            }
-        case _ ⇒ Nil
-      }
+    Menu(
+      Item(
+        "iterators",
+        span("Intro")
+      ) ::
+      rendered
+        .children
+        .collect {
+          case s: Tree.Section ⇒
+            Item(s)
+        }
+        .toList
+    )
 
   def main(args: Array[String]): Unit = {
-    document
-      .getElementById("main")
-      .appendChild(
-        div(
-          rendered.compile
-        )
-        .render
-      )
+    rendered.compile.renderIntoDOM(
+      getElementById("main")
+    )
 
-    document
-      .getElementById("nav-container")
-      .appendChild(
-        menu.render
-      )
+    menu.renderIntoDOM(
+      getElementById("nav-container")
+    )
   }
 }

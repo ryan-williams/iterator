@@ -3,6 +3,7 @@ package org.hammerlab.iterator.docs
 import java.io.ByteArrayInputStream
 
 import org.hammerlab.docs.block
+import japgolly.scalajs.react.vdom.html_<^.<._
 
 trait end
   extends base {

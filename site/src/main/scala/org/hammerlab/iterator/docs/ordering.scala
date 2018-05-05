@@ -43,17 +43,19 @@ trait ordering
               Iterator(1, 2, 3, 3, 4, 5, 6)
             )
           ),
-          h("Merging with a 3rd type"),
-          p"Instances of the ${'View} type-class let merges use a type other than that of the elements being merged:",
-          fence(
-            view,
-            example(
-              Seq('a → 1, 'b → 3).merge(Seq('c→2)),
-              Iterator('a → 1, 'c → 2, 'b → 3)
-            ),
-            example(
-              Seq('a → 1, 'b → 3).eitherMerge(Seq(2)),
-              Iterator(L('a → 1), R(2), L('b → 3))
+          h(
+            "Merging with a 3rd type",
+            p"Instances of the ${'View} type-class let merges use a type other than that of the elements being merged:",
+            fence(
+              view,
+              example(
+                Seq('a → 1, 'b → 3).merge(Seq('c→2)),
+                Iterator('a → 1, 'c → 2, 'b → 3)
+              ),
+              example(
+                Seq('a → 1, 'b → 3).eitherMerge(Seq(2)),
+                Iterator(L('a → 1), R(2), L('b → 3))
+              )
             )
           )
         )

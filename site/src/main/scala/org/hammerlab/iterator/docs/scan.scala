@@ -2,15 +2,16 @@ package org.hammerlab.iterator.docs
 
 import org.hammerlab.docs.Code.Setup
 
+import japgolly.scalajs.react.vdom.html_<^._, <._, ^._
+
 trait scan
   extends base {
-  import b.all._
 
   def catsMonoidLink =
     code(
       a(
         href := "https://typelevel.org/cats/typeclasses/monoid.html",
-        "cats.Monoid"
+        VdomNode("cats.Monoid")
       )
     )
 
