@@ -3,18 +3,12 @@ package org.hammerlab.iterator.docs
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code.Example
-import org.hammerlab.iterator.docs.markdown.Elem.P
-import org.hammerlab.iterator.docs.markdown.{ Inline, Section }
-import org.hammerlab.iterator.docs.markdown.Inline.Plain.{ Code, Text }
+import org.hammerlab.iterator.docs.markdown._, Elem._
+import org.hammerlab.iterator.docs.markdown.Inline.NonLink._
 
 trait symbol {
   implicit def symbolToString(s: Symbol): String = s.toString.drop(1)
   implicit def symbolToTextModifier(s: Symbol): Text = Text(s.toString.drop(1))
-}
-
-case class URL(value: String) {
-  override def toString: String = value
-  def /(segment: String): URL = URL(s"$value/$segment")
 }
 
 trait interp
@@ -58,7 +52,7 @@ trait interp
 
 trait Pkg {
 
-  def pkg(body: markdown.Elem*)(implicit name: sourcecode.FullName): Section =
+  def pkg(body: Elem*)(implicit name: sourcecode.FullName): Section =
     Section(
       name
         .value

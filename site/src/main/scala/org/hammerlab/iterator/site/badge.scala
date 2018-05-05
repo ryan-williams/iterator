@@ -1,10 +1,10 @@
 package org.hammerlab.iterator.site
 
 import japgolly.scalajs.react.vdom.Attr.ValueType
-import org.hammerlab.iterator.docs.markdown.Inline.Plain.Text
+import org.hammerlab.iterator.docs.markdown.Inline.NonLink.Text
 import org.hammerlab.iterator.docs.markdown.Inline.{ A, Img }
-import org.hammerlab.iterator.docs.markdown.Opt
-import org.hammerlab.iterator.docs.markdown.Opt.Non
+import org.hammerlab.iterator.docs.Opt
+import org.hammerlab.iterator.docs.Opt.Non
 import org.hammerlab.iterator.docs.{ URL, symbol }
 
 import scala.scalajs.js
@@ -76,7 +76,7 @@ trait badge
               issue: Int,
               comment: Opt[Int] = Non) =
       A(
-        Seq(Text(s"$org/$repo#$issue")),
+        Text(s"$org/$repo#$issue"),
         domain / org / repo / 'issues / s"$issue${comment.fold("")(c ⇒ s"#issuecomment-$c")}"
       )
   }
