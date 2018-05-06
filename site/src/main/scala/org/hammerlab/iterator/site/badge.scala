@@ -12,7 +12,8 @@ import org.hammerlab.iterator.docs.symbol
 import scala.scalajs.js
 
 trait badge
-  extends symbol {
+  extends symbol
+     with dsl {
 
   implicit def urlToJS(url: URL): js.Any = url.toString
   implicit val urlValue: ValueType[URL, String] = ValueType.byImplicit
@@ -20,7 +21,7 @@ trait badge
   def badge(url: URL,
             alttext: String,
             image: URL) =
-    Inline.A(
+    a(
       NonLink.Img(
         src = image,
         alt = alttext
@@ -66,7 +67,7 @@ trait badge
 
     def badge(implicit gh: GitHub) = {
       import gh._
-      Inline.A(
+      a(
         NonLink.Img(
           src = URL(".") / "github.svg",
           alt = "Github Logo"
@@ -81,7 +82,7 @@ trait badge
               repo: String,
               issue: Int,
               comment: Opt[Int] = Non) =
-      Inline.A(
+      a(
         Text(s"$org/$repo#$issue"),
         domain / org / repo / 'issues / s"$issue${comment.fold("")(c ⇒ s"#issuecomment-$c")}"
       )

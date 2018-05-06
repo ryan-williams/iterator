@@ -2,6 +2,7 @@ package org.hammerlab.iterator.docs.markdown
 
 import hammerlab.lines.Lines
 import org.hammerlab.iterator.docs.markdown
+import org.hammerlab.iterator.docs.markdown.tree.NonLink.Del
 
 trait dsl {
 
@@ -9,6 +10,8 @@ trait dsl {
   import org.hammerlab.docs.Code.Setup
 
   import markdown.dsl._
+
+  object a extends Inline.A.dsl
 
   def fence(body: Code*): Fence =
     Fence(
@@ -23,6 +26,8 @@ trait dsl {
       )
     )
   def p(elems: Inline*): P = P(elems)
+
+  def del(value: String): Del = Del(value)
 
   object section {
 
@@ -65,6 +70,10 @@ trait dsl {
         elems = elems
       )
   }
+
+  def h(id: Id, title: Seq[Inline], elems: Elem*): Section = Section(title, id, elems)
+  def h(id: Id, title: Inline, elems: Elem*): Section = Section(Seq(title), id, elems)
+  def h(title: Inline, elems: Elem*): Section = section(Seq(title), elems: _*)
 }
 
 object dsl

@@ -24,19 +24,22 @@ trait elem[_Id] {
       alt: Opt[String],
       clz: Clz
     )
+
     object A {
-      def apply(
-        content: NonLink,
-        target: Target,
-        alt: Opt[String] = Non,
-        clz: Clz = Nil
-      ) =
-        new A(
-          Seq(content),
-          target,
-          alt,
-          clz
-        )
+      trait dsl {
+        def apply(
+          content: NonLink,
+          target: Target,
+          alt: Opt[String] = Non,
+          clz: Clz = Nil
+        ) =
+          new A(
+            Seq(content),
+            target,
+            alt,
+            clz
+          )
+      }
     }
   }
 

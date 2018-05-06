@@ -3,8 +3,11 @@ package org.hammerlab.iterator.docs
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code.Example
-import org.hammerlab.iterator.docs.markdown._, dsl._
+import org.hammerlab.iterator.docs.markdown._
+import dsl._
+import org.hammerlab.iterator.docs.markdown.tree.NonLink
 import org.hammerlab.iterator.docs.markdown.tree.NonLink._
+import shapeless.{ Inl, Inr }
 
 trait symbol {
   implicit def symbolToString(s: Symbol): String = s.toString.drop(1)
@@ -16,8 +19,10 @@ trait interp
 
   case class Arg(value: Inline)
   object Arg {
-    implicit def   string(value: String): Arg = Arg(Code(value))
-    implicit def   symbol(value: Symbol): Arg = Arg(Code(value))
+    implicit def   string(value: String): Arg = Code(value)
+    implicit def   symbol(value: Symbol): Arg = Code(value)
+    implicit def nonLinkArg(n: NonLink): Arg = Inl(n)
+    implicit def    linkArg(a: Inline.A): Arg = Inr(Inl(a))
     implicit def modifier(value: Inline): Arg = Arg(value)
     implicit def unwrap(a: Arg): Inline = a.value
   }

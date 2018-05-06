@@ -92,9 +92,18 @@ object Docs
       section(
         "Examples",
         p"Grouped by package:",
-        docs.count.!,
-        docs.either.!,
-        docs.end.!
+        docs.   count !,
+        docs.  either !,
+        docs.     end !,
+        docs.   group !,
+        docs.   level !,
+        docs.ordering !,
+        docs.   range !,
+        docs.  sample !,
+        docs.    scan !,
+        docs. sliding !,
+        docs.   start !,
+        docs.    util !
       )
     )
 
