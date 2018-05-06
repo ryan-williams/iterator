@@ -1,12 +1,13 @@
-package org.hammerlab.iterator.docs.markdown
+package org.hammerlab.iterator.docs.markdown.fqn
 
 import org.hammerlab.iterator.docs.Opt.Non
 import org.hammerlab.iterator.docs.{ Opt, markdown }
 import shapeless.{ Inl, Inr }
+import markdown.dsl
 
 import scala.collection.mutable
 
-package object fqn
+object tree
   extends markdown.tree.elem[Id] {
 
   override type CanLinkTo = Section
@@ -101,7 +102,7 @@ package object fqn
                 case s: dsl.NonSection ⇒ s: NonSection
               }
 
-          new Section(
+          Section(
             section.title,
             prefixed,
             children

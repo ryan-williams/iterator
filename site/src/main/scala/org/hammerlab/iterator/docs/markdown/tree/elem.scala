@@ -6,7 +6,9 @@ import org.hammerlab.iterator.docs.Opt.Non
 import org.hammerlab.iterator.docs.markdown.{ Clz, URL }
 import shapeless.{ :+:, CNil, Inl, Inr }
 
-trait elem[Id] {
+trait elem[_Id] {
+
+  private type Id = _Id
 
   type Inline = NonLink :+: Inline.A :+: CNil
   implicit def inlineNonLink(n: NonLink): Inline = Inl(n)

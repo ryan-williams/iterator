@@ -50,7 +50,8 @@ trait interp
   }
 }
 
-trait Pkg {
+trait Pkg
+  extends dsl {
 
   def pkg(body: Elem*)(implicit name: sourcecode.FullName): Section =
     section(
@@ -70,6 +71,7 @@ trait Pkg {
 
 trait base
   extends Example.make
+     with dsl
      with symbol
      with interp
      with hammerlab.cmp.first

@@ -3,15 +3,13 @@ package org.hammerlab.iterator.docs.markdown
 import hammerlab.lines.Lines
 import org.hammerlab.iterator.docs.markdown
 
-package object dsl
-  extends markdown.tree.elem[dsl.Id] {
+trait dsl {
 
   import org.hammerlab.docs.Code
   import org.hammerlab.docs.Code.Setup
 
-  override type CanLinkTo = Section
+  import markdown.dsl._
 
-  def section(title: Inline, elems: Elem*): Section = MkSection(title, elems)
   def fence(body: Code*): Fence =
     Fence(
       Lines(
@@ -26,7 +24,7 @@ package object dsl
     )
   def p(elems: Inline*): P = P(elems)
 
-  object MkSection {
+  object section {
 
     import Inline.A
 
@@ -37,8 +35,8 @@ package object dsl
         ('0' to '9')
       )
 
-    import shapeless.{Inl, Inr}
-    def id(title: Seq[Inline]): dsl.Id =
+    import shapeless.{ Inl, Inr }
+    def id(title: Seq[Inline]): Id =
       Id(
         title
           .map {
@@ -59,11 +57,18 @@ package object dsl
           .mkString("-")
       )
 
-    def apply(title: Inline, elems: Seq[Elem]): Section =
+    def apply(title: Inline, elems: Elem*): Section = apply(Seq(title), elems: _*)
+    def apply(title: Seq[Inline], elems: Elem*): Section =
       Section(
-        Seq(title),
-        id(Seq(title)),
+        title,
+        id(title),
         elems = elems
       )
   }
+}
+
+object dsl
+  extends markdown.tree.elem[Id] {
+  type Id = markdown.Id
+  override type CanLinkTo = Section
 }

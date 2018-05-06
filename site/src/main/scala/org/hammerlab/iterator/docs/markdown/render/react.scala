@@ -3,9 +3,10 @@ package org.hammerlab.iterator.docs.markdown.render
 import hammerlab.indent.implicits.spaces2
 import japgolly.scalajs.react.internal.OptionLike
 import japgolly.scalajs.react.raw
-import org.hammerlab.iterator.docs.markdown._
+import org.hammerlab.iterator.docs.markdown.{ Clz, URL, fqn, tree }
 import tree._
-import dsl._
+import fqn._
+import fqn.tree._
 import Inline._
 import NonLink._
 import org.hammerlab.iterator.docs._
@@ -21,7 +22,7 @@ object react {
   import ^._
   import japgolly.scalajs.react.vdom.Attr.ValueType
 
-  type Tag = VdomNode
+  type Tag = VdomElement
 
   case class Key(override val toString: String)
   object Key
@@ -40,8 +41,6 @@ object react {
       def isEmpty [A]   (o: O[A])                  : Boolean   = o.isEmpty
       def toOption[A]   (o: O[A])                  : Option[A] = o
     }
-
-  implicit val idAttr: ValueType[Id, String] = ValueType.byImplicit(_.toString)
 
   implicit def convKey(k: Key): raw.React.Key = k.toString
 
@@ -65,6 +64,7 @@ object react {
 
   def by[A, U](implicit f: A => js.Any): ValueType[A, U] = ValueType.byImplicit(f)
 
+  implicit val idAttr: ValueType[Id, String] = by(_.entries.map(_.value).mkString("-"))
   implicit val urlAttr: ValueType[URL, String] = by(_.toString)
   implicit val targetAttr: ValueType[Target, String] =
     by {
@@ -95,10 +95,10 @@ object react {
     li(
       key,
       apply(item.title),
-      item.elems.toVdomArray(apply)
+      item.elems.toVdomArray(nonsection)
     )
 
-  def apply(elem: NonSection)(implicit k: Key): Tag =
+  def nonsection(elem: NonSection)(implicit k: Key): Tag =
     elem match {
       case P(elems) ⇒
         p(
@@ -133,10 +133,10 @@ object react {
         )
     }
 
-  def apply(elem: Elem, level: Int = 1)(implicit k: Key): Tag =
+  def apply(elem: Elem, level: Int = 1)(implicit k: Key): VdomNode =
     elem match {
       case Section(title, id, children) ⇒
-        (
+        val h = (
           level match {
             case 1 ⇒ h1
             case 2 ⇒ h2
@@ -152,9 +152,27 @@ object react {
         ) (
           key,
           ^.id := id,
-          title.toVdomArray(apply),
-          children.toVdomArray(apply(_, level + 1))
+          title
+            .zipWithIndex
+            .toVdomArray {
+              case (e, i) ⇒
+                apply(e)(i)
+            }
         )
-      case n: NonSection ⇒ apply(n)
+
+        children match {
+          case Seq() ⇒ h
+          case children ⇒
+            VdomArray(
+              h,
+              children
+                .zipWithIndex
+                .toVdomArray {
+                  case (e, i) ⇒
+                    apply(e, level + 1)(i)
+                }
+            )
+        }
+      case n: NonSection ⇒ nonsection(n)
     }
 }
