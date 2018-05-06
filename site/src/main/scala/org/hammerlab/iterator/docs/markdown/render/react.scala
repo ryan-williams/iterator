@@ -39,13 +39,13 @@ object react {
 
   def key(implicit k: Key) = ^.key := k
 
-  def plain(plain: NonLink, _id: Opt[Id] = Non)(implicit k: Key): Tag =
+  def plain(plain: NonLink)(implicit k: Key): Tag =
     plain match {
-      case Text(value) ⇒ span(key, id :=? _id, value)  // TODO: is wrapping in a <span> necessary / desirable?
-      case    B(value) ⇒    b(key, id :=? _id, value)
-      case    I(value) ⇒    i(key, id :=? _id, value)
-      case  Del(value) ⇒  del(key, id :=? _id, value)
-      case Code(value) ⇒ code(key, id :=? _id, value)
+      case Text(value) ⇒ span(key, value)  // TODO: is wrapping in a <span> necessary / desirable?
+      case    B(value) ⇒    b(key, value)
+      case    I(value) ⇒    i(key, value)
+      case  Del(value) ⇒  del(key, value)
+      case Code(value) ⇒ code(key, value)
     }
 
   implicit val urlAttr: ValueType[URL, String] = ValueType.byImplicit(_.toString)
@@ -57,9 +57,9 @@ object react {
       case Inline.Img(_src, _alt, clz) ⇒
         img(
           key,
-          src := _src,
-          `class` := clz,
-          alt :=? _alt
+             src  :=  _src,
+          `class` :=   clz,
+             alt  :=? _alt
         )
       case A(children, url, _alt, clz) ⇒
         a(

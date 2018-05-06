@@ -6,7 +6,10 @@ import org.hammerlab.iterator.docs.Opt
 sealed trait Inline
 object Inline {
 
-  sealed trait NonLink extends Inline {
+  implicit def wrap(v: String): Inline = NonLink.Text(v)
+
+  sealed trait NonLink
+    extends Inline {
     def value: String
   }
   object NonLink {
@@ -21,7 +24,15 @@ object Inline {
     }
   }
 
-  implicit def wrap(v: String): Inline = NonLink.Text(v)
+  // <img>
+  case class Img(
+    src: URL,
+    alt: String,
+    clz: Clz = Nil
+  )
+  extends NonLink {
+    def value = alt
+  }
 
   case class A(
     children: Seq[NonLink],
@@ -44,24 +55,13 @@ object Inline {
         clz
       )
   }
-
-  // <img>
-  case class Img(
-     src: URL,
-     alt: String,
-     clz: Clz = Nil
-  )
-  extends NonLink {
-    def value = alt
-  }
 }
 
 sealed trait Target
 
-case class URL(value: String)
+case class URL(override val toString: String)
   extends Target {
-  override def toString: String = value
-  def / (segment: String): URL = URL(s"$value/$segment")
+  def / (segment: String): URL = URL(s"$this/$segment")
 }
 
 trait HasId extends Target {

@@ -4,7 +4,6 @@ import hammerlab.lines.Lines
 import org.hammerlab.iterator.docs.Opt
 import org.hammerlab.iterator.docs.Opt.Non
 import org.hammerlab.iterator.docs.markdown.Inline.{ A, NonLink }
-import org.hammerlab.iterator.docs.markdown.{ HasId, Target, URL }
 
 // "Top-level" elements within a section: <p>, <ol>, <ul>
 sealed trait Elem
