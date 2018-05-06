@@ -6,6 +6,9 @@ object Opt {
   case  class Som[T](value: T) extends Opt[T]
 
   implicit def lift[T](t: T): Opt[T] = Som(t)
+  implicit def liftImplicit[T](implicit t: T): Opt[T] = Som(t)
+  //implicit def implicitConv[T, U](t: Opt[T])(implicit fn: T ⇒ U): Opt[U] = t.map(fn)
+
   implicit def toStd[T](t: Opt[T]): Option[T] =
     t match {
       case Non    ⇒ None

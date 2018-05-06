@@ -3,8 +3,16 @@ package org.hammerlab.iterator.docs.markdown.render
 import hammerlab.indent.implicits.spaces2
 import japgolly.scalajs.react.internal.OptionLike
 import japgolly.scalajs.react.raw
-import org.hammerlab.iterator.docs.markdown._, Elem._, Inline._, NonLink._
-import org.hammerlab.iterator.docs._, Opt.Non
+import org.hammerlab.iterator.docs.markdown._
+import tree._
+import dsl._
+import Inline._
+import NonLink._
+import org.hammerlab.iterator.docs._
+import org.hammerlab.iterator.docs.markdown.tree.NonLink
+import shapeless.{ Inl, Inr }
+
+import scala.scalajs.js
 
 object react {
 
@@ -46,22 +54,29 @@ object react {
       case    I(value) ⇒    i(key, value)
       case  Del(value) ⇒  del(key, value)
       case Code(value) ⇒ code(key, value)
+      case NonLink.Img(_src, _alt, clz) ⇒
+        img(
+          key,
+             src  := _src,
+          `class` :=  clz,
+             alt  := _alt
+        )
     }
 
-  implicit val urlAttr: ValueType[URL, String] = ValueType.byImplicit(_.toString)
+  def by[A, U](implicit f: A => js.Any): ValueType[A, U] = ValueType.byImplicit(f)
+
+  implicit val urlAttr: ValueType[URL, String] = by(_.toString)
+  implicit val targetAttr: ValueType[Target, String] =
+    by {
+      case Inl(url) ⇒ url.toString
+      case Inr(Inl(target)) ⇒ s"#${target.id}"
+    }
   implicit val clzAttr: ValueType[Clz, String] = ValueType.byImplicit(_.values.mkString(" "))
 
   def apply(value: Inline)(implicit k: Key): Tag =
     value match {
-      case plain: NonLink ⇒ this.plain(plain)
-      case Inline.Img(_src, _alt, clz) ⇒
-        img(
-          key,
-             src  :=  _src,
-          `class` :=   clz,
-             alt  :=? _alt
-        )
-      case A(children, url, _alt, clz) ⇒
+      case Inl(plain) ⇒ this.plain(plain)
+      case Inr(Inl(A(children, url, _alt, clz))) ⇒
         a(
           key,
           href := url,

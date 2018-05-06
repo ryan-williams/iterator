@@ -2,7 +2,8 @@ package org.hammerlab.iterator.site
 
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
-import org.hammerlab.iterator.docs.Tree
+import org.hammerlab.iterator.docs.markdown.dsl
+//import org.hammerlab.iterator.docs.Tree
 
 object Menu {
 
@@ -25,14 +26,14 @@ object Menu {
         title,
         Children(children)
       )
-    def apply(section: Tree.Section): Item =
+    def apply(section: dsl.Section): Item =
       Item(
-        section.id.id,
-        section.title,
+        section.id.value,
+        ???, //section.title,
         section
-          .children
+          .elems
           .collect {
-            case s: Tree.Section ⇒ apply(s)
+            case s: dsl.Section ⇒ apply(s)
           }: _*
       )
   }

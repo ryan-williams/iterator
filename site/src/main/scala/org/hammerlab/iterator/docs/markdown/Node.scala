@@ -1,7 +1,7 @@
 package org.hammerlab.iterator.docs.markdown
 
-import org.hammerlab.iterator.docs.Opt
-import shapeless.Generic
+//import org.hammerlab.iterator.docs.Opt
+//import shapel.Generic
 
 //trait Node {
 //  def  id: Opt[Id] = None

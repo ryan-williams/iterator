@@ -17,5 +17,5 @@ object Clz extends symbol {
   implicit def fromEntries(values: Seq[Entry]): Clz = Clz(values)
 }
 
-case class Id(value: String)
+//case class Id(value: String)
 

@@ -7,7 +7,8 @@ import org.hammerlab.iterator.docs._
 import org.hammerlab.iterator.site.Menu.Item
 import org.scalajs.dom.document.getElementById
 import markdown.dsl._
-import org.hammerlab.iterator.docs.markdown.Elem.Fence
+import org.hammerlab.iterator.docs.markdown.tree.NonLink.Text
+//import org.hammerlab.iterator.docs.markdown.Elem.Fence
 import org.hammerlab.lines.Lines
 import org.hammerlab.test.Cmp
 
@@ -45,7 +46,7 @@ object Docs
 
   val intro =
     section(
-      'iterators,
+      Text('iterators),
       p(
         travis(),
         coveralls(),

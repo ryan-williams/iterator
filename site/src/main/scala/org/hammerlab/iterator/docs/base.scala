@@ -3,8 +3,8 @@ package org.hammerlab.iterator.docs
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code.Example
-import org.hammerlab.iterator.docs.markdown._, Elem._
-import org.hammerlab.iterator.docs.markdown.Inline.NonLink._
+import org.hammerlab.iterator.docs.markdown._, dsl._
+import org.hammerlab.iterator.docs.markdown.tree.NonLink._
 
 trait symbol {
   implicit def symbolToString(s: Symbol): String = s.toString.drop(1)
@@ -31,13 +31,13 @@ trait interp
           .map{ Text(_) }
 
         (
-          (strings.next) ::
+          strings.next ::
           args
             .iterator
             .zip(strings)
             .flatMap {
               case (arg, string) ⇒
-                Iterator(
+                Iterator[Inline](
                   arg.value,
                   string
                 )
@@ -53,17 +53,19 @@ trait interp
 trait Pkg {
 
   def pkg(body: Elem*)(implicit name: sourcecode.FullName): Section =
-    Section(
-      name
-        .value
-        .split("\\.")
-        .dropWhile(_ != "docs")
-        .drop(1)
-        .head,
-      body
+    section(
+      Text(
+        name
+          .value
+          .split("\\.")
+          .dropWhile(_ != "docs")
+          .drop(1)
+          .head
+        ),
+      body: _*
     )
 
-  def c3(name: String) = Section(Code(name))
+  def c3(name: String) = section(Code(name))
 }
 
 trait base

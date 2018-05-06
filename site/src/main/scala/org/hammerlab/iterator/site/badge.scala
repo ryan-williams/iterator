@@ -1,27 +1,31 @@
 package org.hammerlab.iterator.site
 
 import japgolly.scalajs.react.vdom.Attr.ValueType
-import org.hammerlab.iterator.docs.markdown.Inline.NonLink.Text
-import org.hammerlab.iterator.docs.markdown.Inline.{ A, Img }
+import org.hammerlab.iterator.docs.markdown._
+import tree._
+import NonLink._
+import dsl._
 import org.hammerlab.iterator.docs.Opt
 import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.{ URL, symbol }
+import org.hammerlab.iterator.docs.symbol
 
 import scala.scalajs.js
 
 trait badge
   extends symbol {
 
-  implicit def urlToJS(url: URL): js.Any = url.value
+  implicit def urlToJS(url: URL): js.Any = url.toString
   implicit val urlValue: ValueType[URL, String] = ValueType.byImplicit
 
   def badge(url: URL,
             alttext: String,
             image: URL) =
-    Img(
-      src = image,
-      href = url,
-      alt = alttext,
+    Inline.A(
+      NonLink.Img(
+        src = image,
+        alt = alttext
+      ),
+      target = url,
       clz = 'badge
     )
 
@@ -62,11 +66,13 @@ trait badge
 
     def badge(implicit gh: GitHub) = {
       import gh._
-      Img(
-         src = URL(".") / "github.svg",
-         alt = "Github Logo",
-        href = domain / user / repo,
-         clz = "github-badge"
+      Inline.A(
+        NonLink.Img(
+          src = URL(".") / "github.svg",
+          alt = "Github Logo"
+        ),
+        target = domain / user / repo,
+        clz = "github-badge"
       )
     }
 
@@ -75,7 +81,7 @@ trait badge
               repo: String,
               issue: Int,
               comment: Opt[Int] = Non) =
-      A(
+      Inline.A(
         Text(s"$org/$repo#$issue"),
         domain / org / repo / 'issues / s"$issue${comment.fold("")(c ⇒ s"#issuecomment-$c")}"
       )

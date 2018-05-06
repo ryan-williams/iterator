@@ -2,10 +2,11 @@ package org.hammerlab.iterator.docs.markdown.render
 
 import hammerlab.indent.implicits.spaces2
 import org.hammerlab.iterator.docs.Opt
-import org.hammerlab.iterator.docs.markdown.Elem._
-import org.hammerlab.iterator.docs.markdown.Inline.NonLink._
-import org.hammerlab.iterator.docs.markdown.Inline._
 import org.hammerlab.iterator.docs.markdown._
+import tree._
+import dsl._
+import NonLink._
+import shapeless.{ Inl, Inr }
 
 object tags {
 
@@ -27,7 +28,12 @@ object tags {
     private def by[From, To](fn: From ⇒ To)(implicit av: AttrValue[To]): AttrValue[From] =
       (t: Builder, a: Attr, v: From) ⇒ av(t, a, fn(v))
 
-    implicit val urlToAttrValue: AttrValue[URL] = by(_.value)
+    implicit val urlToAttrValue: AttrValue[URL] = by(_.toString)
+    implicit val targetToAttrValue: AttrValue[Target] =
+      by {
+        case Inl(url) ⇒ url.toString
+        case Inr(Inl(target)) ⇒ s"#${target.id}"
+      }
     implicit val  idToAttrValue: AttrValue[ Id] = by(_.value)
     implicit val clzToAttrValue: AttrValue[Clz] = by(_.values.mkString(" "))
     implicit def optToAttrValue[T](implicit a: AttrValue[Option[T]]): AttrValue[Opt[T]] = by(Opt.toStd[T])
@@ -45,18 +51,18 @@ object tags {
         case            I(value) ⇒    i(value)
         case          Del(value) ⇒  del(value)
         case         Code(value) ⇒ code(value)
+        case  NonLink.Img(_src, _alt, clz) ⇒
+          img(
+               src  := _src,
+            `class` :=  clz,
+               alt  := _alt
+          )
       }
 
     def apply(inline: Inline): Tag =
       inline match {
-        case plain: NonLink ⇒ this.plain(plain)
-        case Inline.Img(_src, _alt, clz) ⇒
-          img(
-            src := _src,
-            `class` := clz,
-            _alt.map(alt := _),
-          )
-        case A(children, url, _alt, clz) ⇒
+        case Inl(plain) ⇒ this.plain(plain)
+        case Inr(Inl(Inline.A(children, url, _alt, clz))) ⇒
           a(
             href := url,
             alt := _alt,
