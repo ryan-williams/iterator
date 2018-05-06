@@ -6,7 +6,7 @@ body {
 #nav-container {
   position: fixed;
   width: 180px;
-  margin-left: -170px;
+  margin-left: -180px;
   top: 1em;
   overflow-y: hidden;
   overflow-x: hidden;
