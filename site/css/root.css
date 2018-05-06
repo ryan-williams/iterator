@@ -1,13 +1,17 @@
 body {
   position: relative;
-  padding-left: 140px;
+  padding-left: 180px;
 }
 
 #nav-container {
   position: fixed;
-  width: 140px;
-  margin-left: -140px;
-  top: 0.6em;
+  width: 180px;
+  margin-left: -170px;
+  top: 1em;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  bottom: 0;
+  padding-bottom: 0.6em;
 }
 
 p {
@@ -46,8 +50,9 @@ h4 {
 }
 
 #main {
+  position: relative;
   margin-top: 0.5em;
-  margin-bottom: 5em;
+  margin-bottom: 3em;
 }
 
 .badge {
@@ -62,6 +67,11 @@ h4 {
   padding: 0 0.1rem;
 }
 
+.nav ul {
+  list-style: none;
+  padding-left: 0;
+}
+
 .navbar {
   padding-left: 1.5rem;
 }
@@ -71,16 +81,22 @@ h4 {
 }
 
 .github-badge {
-}
-
-.github-badge > img {
   height: 1.05em;
   padding-left: 0.3em;
   padding-bottom: 0.18em;
 }
 
-.nav-pills > .nav-link {
+.nav-indent {
+  margin-left: 0.5em;
+  margin-right: 0
+}
+
+.nav-link {
   width: 100%;
+}
+
+.nav-link > * {
+  white-space: nowrap;
 }
 
 .nav-link-2 {

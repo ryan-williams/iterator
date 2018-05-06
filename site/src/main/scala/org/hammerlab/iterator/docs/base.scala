@@ -27,7 +27,38 @@ trait interp
     implicit def unwrap(a: Arg): Inline = a.value
   }
 
+  case class NArg(value: NonLink)
+  object NArg {
+    implicit def   string(value:  String): NArg = Text(value)
+    implicit def   symbol(value:  Symbol): NArg = Code(value)
+    implicit def     nArg(value: NonLink): NArg = NArg(value)
+    implicit def unwrap(a: NArg): NonLink = a.value
+  }
+
   implicit class CodeContext(sc: StringContext) {
+    def n(args: NArg*): List[NonLink] = {
+      val strings =
+        sc
+          .parts
+          .iterator
+          .map{ Text(_) }
+
+      (
+        strings.next ::
+          args
+            .iterator
+            .zip(strings)
+            .flatMap {
+              case (arg, string) ⇒
+                Iterator(
+                  arg.value,
+                  string
+                )
+            }
+            .toList
+        )
+    }
+
     def t(args: Arg*): List[Inline] = {
       val strings =
         sc
@@ -78,7 +109,6 @@ trait base
   extends Example.make
      with dsl
      with symbol
-     with interp
      with hammerlab.cmp.first
      with hammerlab.iterator.all
      with cats.instances.AllInstances

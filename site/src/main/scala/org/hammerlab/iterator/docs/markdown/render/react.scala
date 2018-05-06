@@ -2,7 +2,7 @@ package org.hammerlab.iterator.docs.markdown.render
 
 import hammerlab.indent.implicits.spaces2
 import japgolly.scalajs.react.internal.OptionLike
-import japgolly.scalajs.react.raw
+import japgolly.scalajs.react.{ raw, vdom }
 import org.hammerlab.iterator.docs.markdown.{ Clz, URL, fqn, tree }
 import tree._
 import fqn._
@@ -64,14 +64,22 @@ object react {
 
   def by[A, U](implicit f: A => js.Any): ValueType[A, U] = ValueType.byImplicit(f)
 
-  implicit val idAttr: ValueType[Id, String] = by(_.entries.map(_.value).mkString("-"))
-  implicit val urlAttr: ValueType[URL, String] = by(_.toString)
+  implicit val  idAttr: ValueType[ Id, vdom.Attr.Key] = by(_.toString)
+  implicit val urlAttr: ValueType[URL,        String] = by(_.toString)
   implicit val targetAttr: ValueType[Target, String] =
     by {
       case Inl(url) ⇒ url.toString
       case Inr(Inl(target)) ⇒ s"#${target.id}"
     }
   implicit val clzAttr: ValueType[Clz, String] = ValueType.byImplicit(_.values.mkString(" "))
+
+  implicit def inlines(value: Seq[Inline]): VdomNode =
+    value
+      .zipWithIndex
+      .toVdomArray {
+        case (e, i) ⇒
+        apply(e)(i)
+      }
 
   def apply(value: Inline)(implicit k: Key): Tag =
     value match {
@@ -82,12 +90,7 @@ object react {
           href := url,
           alt :=? _alt,
           `class` := clz,
-          children
-            .zipWithIndex
-            .toVdomArray {
-              case  (e, idx) ⇒
-                apply(e)(idx)
-            }
+          inlines(children)
         )
     }
 
@@ -104,11 +107,6 @@ object react {
         p(
           key,
           elems
-            .zipWithIndex
-            .toVdomArray {
-              case  (elem, idx) ⇒
-                apply(elem)(idx)
-            }
         )
       case Fence(lines) ⇒ pre(key, code(lines.showLines))
       case UL(items) ⇒
@@ -153,11 +151,6 @@ object react {
           key,
           ^.id := id,
           title
-            .zipWithIndex
-            .toVdomArray {
-              case (e, i) ⇒
-                apply(e)(i)
-            }
         )
 
         children match {

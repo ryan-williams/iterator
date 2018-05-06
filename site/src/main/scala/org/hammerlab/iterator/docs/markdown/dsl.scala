@@ -1,10 +1,11 @@
 package org.hammerlab.iterator.docs.markdown
 
 import hammerlab.lines.Lines
-import org.hammerlab.iterator.docs.markdown
+import org.hammerlab.iterator.docs.{ interp, markdown }
 import org.hammerlab.iterator.docs.markdown.tree.NonLink.Del
 
-trait dsl {
+trait dsl
+  extends interp {
 
   import org.hammerlab.docs.Code
   import org.hammerlab.docs.Code.Setup

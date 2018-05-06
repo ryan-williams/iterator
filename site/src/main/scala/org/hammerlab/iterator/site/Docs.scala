@@ -1,43 +1,29 @@
 package org.hammerlab.iterator.site
 
 import hammerlab.show._
-import org.hammerlab.docs.Code.{ Example, Setup }
+import japgolly.scalajs.react.vdom.html_<^.<.div
+import org.hammerlab.docs.Code.Example
 import org.hammerlab.docs.block
 import org.hammerlab.iterator.docs
 import org.hammerlab.iterator.docs._
-import org.hammerlab.iterator.site.Menu.Item
-import org.scalajs.dom.document.getElementById
-import markdown.{ dsl, fqn, render }
-import markdown.dsl._
+import org.hammerlab.iterator.docs.markdown.dsl._
 import org.hammerlab.iterator.docs.markdown.tree.NonLink.Text
+import org.hammerlab.iterator.docs.markdown.{ dsl, fqn, render }
+import org.hammerlab.iterator.site.Menu.Item
 import org.hammerlab.lines.Lines
+import org.scalajs.dom.document.getElementById
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("hammerlab.iterators.docs")
 object Docs
-  extends interp
-     with symbol
-     with Example.make
+  extends Example.make
      with dsl
-//     with either
-//     with end
-//     with group
-//     with level
-//     with ordering
-//     with range
-//     with sample
-//     with scan
-//     with sliding
-//     with start
-//     with util
      with badge {
 
-  import build_info.iterator.{ githubRepo, githubUser, modName, name, organization, version }
+  import build_info.iterator._
   import hammerlab.cmp.first._
   import hammerlab.iterator._
-
-  import cats.instances.   int.catsKernelStdOrderForInt
 
   implicit val _github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)
@@ -83,10 +69,7 @@ object Docs
 
   val html =
     Section(
-      Seq[Inline](
-        Text('iterators),
-        github.badge
-      ),
+      github.title,
       'iterators,
       intro :+
       section(
@@ -109,31 +92,29 @@ object Docs
 
   val rendered = fqn.tree.MkSection(html)
 
-  import japgolly.scalajs.react.vdom.html_<^.<.div
   val react = div(render.react(rendered)('root))
 
-//  val menu =
-//    Menu(
-//      Item(
-//        "iterators",
-//        span("Intro")
-//      ) ::
-//      rendered
-//        .children
-//        .collect {
-//          case s: Tree.Section ⇒
-//            Item(s)
-//        }
-//        .toList
-//    )
+  val menu =
+    Menu(
+      Item(
+        rendered.id,
+        Seq(Text("Intro"))
+      ) ::
+      rendered
+        .elems
+        .collect {
+          case s: fqn.tree.Section ⇒
+            Item(s, 2)
+        }
+        .toList
+    )
 
   def main(args: Array[String]): Unit = {
+    menu.renderIntoDOM(
+      getElementById("nav-container")
+    )
     react.renderIntoDOM(
       getElementById("main")
     )
-
-//    menu.renderIntoDOM(
-//      getElementById("nav-container")
-//    )
   }
 }

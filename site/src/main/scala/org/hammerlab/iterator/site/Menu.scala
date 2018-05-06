@@ -2,8 +2,12 @@ package org.hammerlab.iterator.site
 
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
-import org.hammerlab.iterator.docs.markdown.dsl
-//import org.hammerlab.iterator.docs.Tree
+import org.hammerlab.iterator.docs.Opt
+import org.hammerlab.iterator.docs.Opt.Non
+import org.hammerlab.iterator.docs.markdown.fqn.Id
+import org.hammerlab.iterator.docs.markdown.fqn.tree._
+import org.hammerlab.iterator.docs.markdown.render
+import org.hammerlab.iterator.docs.markdown.render.react.{ idAttr, inlines }
 
 object Menu {
 
@@ -14,27 +18,31 @@ object Menu {
         None
       else
         Some(
-          Children(open = false, items)
+          Children(open = true, items)
         )
   }
-  case class Item(id: String, display: VdomNode, children: Option[Children] = None)
+  case class Item(id: Id, display: Seq[Inline], children: Option[Children])
   object Item {
-    def apply(id: String, children: Item*): Item = apply(id, <.span(id), children: _*)
-    def apply(id: String, title: VdomNode, children: Item*): Item =
+    def apply(id: Id, display: Seq[Inline], children: Item*): Item =
       Item(
         id,
-        title,
+        display,
         Children(children)
       )
-    def apply(section: dsl.Section): Item =
+    def apply(section: Section, maxDepth: Opt[Int] = Non, depth: Int = 1): Item =
       Item(
-        section.id.value,
-        ???, //section.title,
-        section
-          .elems
-          .collect {
-            case s: dsl.Section ⇒ apply(s)
-          }: _*
+        section.id,
+        section.title,
+        (
+          if (maxDepth.exists(_ <= depth))
+            Nil
+          else
+            section
+              .elems
+              .collect {
+                case s: Section ⇒ apply(s, maxDepth, depth + 1)
+              }
+        ): _*
       )
   }
 
@@ -48,29 +56,28 @@ object Menu {
             val Item(id, display, children) = it
             <.li(
               ^.key := id,
-              ^.`class` := "nav-link",
+              ^.`class` := "nav-item",
               <.a(
                 ^.href := s"#$id",
+                ^.`class` := "nav-link",
                 display
               ),
               children
                 .collect {
                   case Children(true, children) ⇒
                     <.ul(
-                      children.map(item): _*
+                      ^.`class` := "nav-indent",
+                      children.toVdomArray(item)
                     )
                 }
                 .getOrElse(Nil.toVdomArray)
             )
           }
 
-          <.nav(
-            ^.id := "nav-container",
-            ^.`class` := "navbar nav-pills",
+          <.ul(
+            ^.`class` := "nav nav-pills",
             items
-              .toVdomArray {
-                item
-              }
+              .toVdomArray { item }
           )
       }
       .build

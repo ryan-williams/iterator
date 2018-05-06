@@ -11,8 +11,12 @@ trait elem[_Id] {
   private type Id = _Id
 
   type Inline = NonLink :+: Inline.A :+: CNil
+
   implicit def inlineNonLink(n: NonLink): Inline = Inl(n)
   implicit def inlineLink(a: Inline.A): Inline = Inr(Inl(a))
+
+  implicit def inlineNonLinks(n: Seq[NonLink]): Seq[Inline] = n.map(Inl(_))
+  implicit def inlineLinks(a: Seq[Inline.A]): Seq[Inline] = a.map(a ⇒ a: Inline)
 
   object Inline {
 
@@ -27,6 +31,18 @@ trait elem[_Id] {
 
     object A {
       trait dsl {
+        def apply(
+          content: Seq[NonLink],
+          target: Target,
+          alt: Opt[String],
+          clz: Clz
+        ) =
+          new A(
+            content,
+            target,
+            alt,
+            clz
+          )
         def apply(
           content: NonLink,
           target: Target,
@@ -58,6 +74,18 @@ trait elem[_Id] {
     elems: Seq[Elem] = Nil
   )
   extends Elem
+  object Section {
+    def apply(
+      title: Inline,
+      id: Id,
+      elems: Seq[Elem]
+    ): Section =
+      Section(
+        Seq(title),
+        id,
+        elems
+      )
+  }
 
   sealed trait NonSection extends Elem
 

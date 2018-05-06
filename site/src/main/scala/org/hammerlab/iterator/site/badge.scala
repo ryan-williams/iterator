@@ -5,15 +5,13 @@ import org.hammerlab.iterator.docs.markdown._
 import tree._
 import NonLink._
 import dsl._
-import org.hammerlab.iterator.docs.Opt
+import org.hammerlab.iterator.docs.{ Opt, markdown, symbol }
 import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.symbol
 
 import scala.scalajs.js
 
 trait badge
-  extends symbol
-     with dsl {
+  extends dsl {
 
   implicit def urlToJS(url: URL): js.Any = url.toString
   implicit val urlValue: ValueType[URL, String] = ValueType.byImplicit
@@ -65,17 +63,32 @@ trait badge
   object github {
     val domain = URL("https://github.com")
 
-    def badge(implicit gh: GitHub) = {
-      import gh._
+    def user(implicit gh: GitHub) = gh.user
+    def repo(implicit gh: GitHub) = gh.repo
+
+    def title(implicit gh: GitHub) =
+      github.link(
+        n"$user/$repo ${github.badge}",
+      )
+
+    def link(elems: Seq[NonLink],
+             alt: Opt[String] = Non,
+             clz: Clz = Nil)(
+        implicit gh: GitHub
+    ) =
       a(
-        NonLink.Img(
-          src = URL(".") / "github.svg",
-          alt = "Github Logo"
-        ),
-        target = domain / user / repo,
+        elems,
+        domain / user / repo,
+        alt,
+        clz
+      )
+
+    def badge(implicit gh: GitHub) =
+      NonLink.Img(
+        src = URL(".") / "github.svg",
+        alt = "Github Logo",
         clz = "github-badge"
       )
-    }
 
     // Link to a github issue
     def issue(org: String,
