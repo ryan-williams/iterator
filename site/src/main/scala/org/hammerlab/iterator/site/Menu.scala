@@ -2,11 +2,11 @@ package org.hammerlab.iterator.site
 
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
-import org.hammerlab.iterator.docs.Opt
-import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.markdown.fqn.Id
-import org.hammerlab.iterator.docs.markdown.fqn.tree._
-import org.hammerlab.iterator.docs.markdown.render.react.{ idAttr, inlines }
+import org.hammerlab.docs.Opt
+import org.hammerlab.docs.Opt.Non
+import org.hammerlab.docs.markdown.fqn.Id
+import org.hammerlab.docs.markdown.fqn.tree._
+import org.hammerlab.docs.markdown.render.react.{ idAttr, inlines }
 
 object Menu {
 

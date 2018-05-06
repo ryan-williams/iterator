@@ -1,7 +1,7 @@
-package org.hammerlab.iterator.docs.markdown.fqn
+package org.hammerlab.docs.markdown.fqn
 
-import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.{ Opt, markdown }
+import org.hammerlab.docs.Opt.Non
+import org.hammerlab.docs.{ Opt, markdown }
 import shapeless.{ Inl, Inr }
 import markdown.dsl
 
@@ -90,8 +90,6 @@ object tree
               case dsl.Fence(lines) ⇒ Fence(lines)
               case dsl.UL(items) ⇒ UL(items)
               case dsl.OL(items) ⇒ OL(items)
-              case dsl.Img(src, alt, href, clz) ⇒
-                       Img(src, alt, href.map(convTarget), clz)
             }
 
           val children =

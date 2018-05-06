@@ -3,10 +3,10 @@ package org.hammerlab.iterator.site
 import hammerlab.indent.implicits.spaces2
 import hammerlab.show._
 import org.hammerlab.docs.Code.Example
-import org.hammerlab.iterator.docs.markdown._
-import org.hammerlab.iterator.docs.markdown.dsl._
-import org.hammerlab.iterator.docs.markdown.tree.NonLink._
-import org.hammerlab.iterator.docs.markdown.util.symbol
+import org.hammerlab.docs.markdown._
+import org.hammerlab.docs.markdown.dsl._
+import org.hammerlab.docs.markdown.tree.NonLink._
+import org.hammerlab.docs.markdown.util.symbol
 
 trait Pkg
   extends dsl {

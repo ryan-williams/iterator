@@ -1,4 +1,4 @@
-package org.hammerlab.iterator.docs
+package org.hammerlab.docs
 
 sealed trait Opt[+T]
 object Opt {

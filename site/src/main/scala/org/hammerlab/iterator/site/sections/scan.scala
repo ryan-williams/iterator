@@ -1,8 +1,8 @@
 package org.hammerlab.iterator.site.sections
 
 import org.hammerlab.docs.Code.Setup
-import org.hammerlab.iterator.docs.markdown.tree.NonLink._
-import org.hammerlab.iterator.docs.markdown.util.URL
+import org.hammerlab.docs.markdown.tree.NonLink._
+import org.hammerlab.docs.markdown.util.URL
 import org.hammerlab.iterator.site.base
 
 object scan

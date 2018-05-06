@@ -1,6 +1,6 @@
-package org.hammerlab.iterator.docs.markdown.fqn
+package org.hammerlab.docs.markdown.fqn
 
-import org.hammerlab.iterator.docs.markdown.dsl
+import org.hammerlab.docs.markdown.dsl
 
 case class Id(entries: Seq[dsl.Id]) {
 

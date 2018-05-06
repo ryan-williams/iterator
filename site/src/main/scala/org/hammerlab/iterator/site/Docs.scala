@@ -1,16 +1,19 @@
 package org.hammerlab.iterator.site
 
+import build_info.iterator._
+import cats.instances.int.catsKernelStdOrderForInt
+import hammerlab.cmp.first._
+import hammerlab.iterator._
 import hammerlab.show._
-import org.hammerlab.docs.Code.Example
-import org.hammerlab.docs.block
-import org.hammerlab.iterator.docs._
-import org.hammerlab.iterator.site.Menu.Item
 import japgolly.scalajs.react.vdom.html_<^.<.div
-import org.scalajs.dom.document.{ body, getElementById }
-import markdown.{ dsl, fqn, render }
-import markdown.dsl._
-import org.hammerlab.iterator.docs.markdown.tree.NonLink.Text
+import org.hammerlab.docs.Code.Example
+import org.hammerlab.docs._
+import org.hammerlab.docs.markdown.dsl._
+import org.hammerlab.docs.markdown.tree.NonLink.Text
+import org.hammerlab.docs.markdown.{ dsl, fqn, render }
+import org.hammerlab.iterator.site.Menu.Item
 import org.hammerlab.lines.Lines
+import org.scalajs.dom.document.getElementById
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
@@ -19,12 +22,6 @@ object Docs
   extends Example.make
      with dsl
      with badge {
-
-  import build_info.iterator._
-  import hammerlab.cmp.first._
-  import hammerlab.iterator._
-
-  import cats.instances.int.catsKernelStdOrderForInt
 
   implicit val _github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)

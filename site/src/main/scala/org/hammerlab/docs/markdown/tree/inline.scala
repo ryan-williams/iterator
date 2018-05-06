@@ -1,8 +1,8 @@
-package org.hammerlab.iterator.docs.markdown.tree
+package org.hammerlab.docs.markdown.tree
 
-import org.hammerlab.iterator.docs.Opt
-import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.markdown.util.Clz
+import org.hammerlab.docs.Opt
+import org.hammerlab.docs.Opt.Non
+import org.hammerlab.docs.markdown.util.Clz
 
 trait inline[Id] {
   sealed trait Inline

@@ -1,13 +1,13 @@
 package org.hammerlab.iterator.site
 
 import japgolly.scalajs.react.vdom.Attr.ValueType
-import org.hammerlab.iterator.docs.markdown._
+import org.hammerlab.docs.markdown._
 import tree._
 import NonLink._
 import dsl._
-import org.hammerlab.iterator.docs.{ Opt, markdown }
-import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL }
+import org.hammerlab.docs.{ Opt, markdown }
+import org.hammerlab.docs.Opt.Non
+import org.hammerlab.docs.markdown.util.{ Clz, URL }
 
 import scala.scalajs.js
 

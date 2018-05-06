@@ -1,17 +1,17 @@
-package org.hammerlab.iterator.docs.markdown.render
+package org.hammerlab.docs.markdown.render
 
 import hammerlab.indent.implicits.spaces2
 import japgolly.scalajs.react.internal.OptionLike
 import japgolly.scalajs.react.{ raw, vdom }
-import org.hammerlab.iterator.docs.markdown.{ fqn, tree }
+import org.hammerlab.docs.markdown.{ fqn, tree }
 import tree._
 import fqn._
 import fqn.tree._
 import Inline._
 import NonLink._
-import org.hammerlab.iterator.docs._
-import org.hammerlab.iterator.docs.markdown.tree.NonLink
-import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL, symbol }
+import org.hammerlab.docs._
+import org.hammerlab.docs.markdown.tree.NonLink
+import org.hammerlab.docs.markdown.util.{ Clz, URL, symbol }
 import shapeless.{ Inl, Inr }
 
 import scala.scalajs.js
@@ -49,11 +49,11 @@ object react {
 
   def plain(plain: NonLink)(implicit k: Key): Tag =
     plain match {
-      case Text(value) ⇒ span(key, value)  // TODO: is wrapping in a <span> necessary / desirable?
-      case    B(value) ⇒    b(key, value)
-      case    I(value) ⇒    i(key, value)
-      case  Del(value) ⇒  del(key, value)
-      case Code(value) ⇒ code(key, value)
+      case         Text(value) ⇒ span(key, value)  // TODO: is wrapping in a <span> necessary / desirable?
+      case            B(value) ⇒    b(key, value)
+      case            I(value) ⇒    i(key, value)
+      case          Del(value) ⇒  del(key, value)
+      case NonLink.Code(value) ⇒ code(key, value)
       case NonLink.Img(_src, _alt, clz) ⇒
         img(
           key,
@@ -63,7 +63,7 @@ object react {
         )
     }
 
-  def by[A, U](implicit f: A => js.Any): ValueType[A, U] = ValueType.byImplicit(f)
+  def by[A, U](implicit f: A ⇒ js.Any): ValueType[A, U] = ValueType.byImplicit(f)
 
   implicit val  idAttr: ValueType[ Id, vdom.Attr.Key] = by(_.toString)
   implicit val urlAttr: ValueType[URL,        String] = by(_.toString)
@@ -99,8 +99,24 @@ object react {
     li(
       key,
       apply(item.title),
-      item.elems.toVdomArray(nonsection)
+      item.elems
     )
+
+  implicit def listitems(elems: Seq[LI]): VdomNode =
+    elems
+      .zipWithIndex
+      .toVdomArray {
+        case (e, i) ⇒
+          apply(e)(i)
+      }
+
+  implicit def nonsections(elems: Seq[NonSection]): VdomNode =
+    elems
+      .zipWithIndex
+      .toVdomArray {
+        case (e, i) ⇒
+        apply(e)(i)
+      }
 
   def nonsection(elem: NonSection)(implicit k: Key): Tag =
     elem match {
@@ -110,26 +126,8 @@ object react {
           elems
         )
       case Fence(lines) ⇒ pre(key, code(lines.showLines))
-      case UL(items) ⇒
-        ul(
-          key,
-          items
-            .zipWithIndex
-            .toVdomArray {
-              case (e, i) ⇒
-                apply(e)(i)
-            }
-        )
-      case OL(items) ⇒
-        ol(
-          key,
-          items
-            .zipWithIndex
-            .toVdomArray {
-              case (e, i) ⇒
-                apply(e)(i)
-            }
-        )
+      case    UL(items) ⇒  ul(key, items)
+      case    OL(items) ⇒  ol(key, items)
     }
 
   def apply(elem: Elem, level: Int = 1)(implicit k: Key): VdomNode =

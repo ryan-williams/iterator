@@ -1,4 +1,4 @@
-package org.hammerlab.iterator.docs.markdown.util
+package org.hammerlab.docs.markdown.util
 
 case class Clz(values: Seq[Clz.Entry] = Nil) {
   def &(entry: Clz.Entry): Clz = Clz(values :+ entry)

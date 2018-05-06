@@ -1,12 +1,12 @@
-package org.hammerlab.iterator.docs.markdown.render
+package org.hammerlab.docs.markdown.render
 
 import hammerlab.indent.implicits.spaces2
-import org.hammerlab.iterator.docs.Opt
-import org.hammerlab.iterator.docs.markdown._
+import org.hammerlab.docs.Opt
+import org.hammerlab.docs.markdown._
 import tree._
 import dsl._
 import NonLink._
-import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL }
+import org.hammerlab.docs.markdown.util.{ Clz, URL }
 import shapeless.{ Inl, Inr }
 
 object tags {

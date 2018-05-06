@@ -1,8 +1,8 @@
-package org.hammerlab.iterator.docs.markdown
+package org.hammerlab.docs.markdown
 
 import hammerlab.lines.Lines
-import org.hammerlab.iterator.docs.markdown
-import org.hammerlab.iterator.docs.markdown.tree.NonLink.Del
+import org.hammerlab.docs.markdown
+import org.hammerlab.docs.markdown.tree.NonLink.Del
 
 trait dsl
   extends interp {
@@ -36,10 +36,10 @@ trait dsl
 
     val idChars = (
       "-_:.".toSet ++
-        ('a' to 'z') ++
-        ('A' to 'Z') ++
-        ('0' to '9')
-      )
+      ('a' to 'z') ++
+      ('A' to 'Z') ++
+      ('0' to '9')
+    )
 
     import shapeless.{ Inl, Inr }
     def id(title: Seq[Inline]): Id =

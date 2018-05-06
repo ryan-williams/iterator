@@ -1,9 +1,9 @@
-package org.hammerlab.iterator.docs.markdown.tree
+package org.hammerlab.docs.markdown.tree
 
 import hammerlab.lines.Lines
-import org.hammerlab.iterator.docs.Opt
-import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL }
+import org.hammerlab.docs.Opt
+import org.hammerlab.docs.Opt.Non
+import org.hammerlab.docs.markdown.util.{ Clz, URL }
 import shapeless.{ :+:, CNil, Inl, Inr }
 
 trait elem[_Id] {
@@ -108,12 +108,12 @@ trait elem[_Id] {
    * It is the only [[Elem]]-type that is allowed to be wrapped in a link, so it folds that into its state via optional
    * [[Img.href]]
    */
-  case class Img(
-    src: URL,
-    alt: String,
-    href: Opt[Target] = Non,
-    clz: Clz = Nil
-  )
-  extends NonSection
+//  case class Img(
+//    src: URL,
+//    alt: String,
+//    href: Opt[Target] = Non,
+//    clz: Clz = Nil
+//  )
+//  extends NonSection
 
 }

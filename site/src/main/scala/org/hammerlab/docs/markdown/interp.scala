@@ -1,9 +1,9 @@
-package org.hammerlab.iterator.docs.markdown
+package org.hammerlab.docs.markdown
 
-import org.hammerlab.iterator.docs.markdown.dsl._
-import org.hammerlab.iterator.docs.markdown.tree.NonLink
-import org.hammerlab.iterator.docs.markdown.tree.NonLink.{ Code, Text }
-import org.hammerlab.iterator.docs.markdown.util.symbol
+import org.hammerlab.docs.markdown.dsl._
+import org.hammerlab.docs.markdown.tree.NonLink
+import org.hammerlab.docs.markdown.tree.NonLink.{ Code, Text }
+import org.hammerlab.docs.markdown.util.symbol
 import shapeless.{ Inl, Inr }
 
 trait interp
