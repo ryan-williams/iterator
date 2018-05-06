@@ -1,11 +1,10 @@
-package org.hammerlab.iterator.docs.markdown
-
-import org.hammerlab.iterator.docs.symbol
+package org.hammerlab.iterator.docs.markdown.util
 
 case class Clz(values: Seq[Clz.Entry] = Nil) {
   def &(entry: Clz.Entry): Clz = Clz(values :+ entry)
 }
-object Clz extends symbol {
+object Clz
+  extends symbol {
   case class Entry(override val toString: String)
   object Entry {
     implicit def fromSym(value: String): Entry = Entry(value)

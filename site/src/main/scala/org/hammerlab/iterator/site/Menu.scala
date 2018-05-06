@@ -6,7 +6,6 @@ import org.hammerlab.iterator.docs.Opt
 import org.hammerlab.iterator.docs.Opt.Non
 import org.hammerlab.iterator.docs.markdown.fqn.Id
 import org.hammerlab.iterator.docs.markdown.fqn.tree._
-import org.hammerlab.iterator.docs.markdown.render
 import org.hammerlab.iterator.docs.markdown.render.react.{ idAttr, inlines }
 
 object Menu {

@@ -3,7 +3,7 @@ package org.hammerlab.iterator.docs.markdown.render
 import hammerlab.indent.implicits.spaces2
 import japgolly.scalajs.react.internal.OptionLike
 import japgolly.scalajs.react.{ raw, vdom }
-import org.hammerlab.iterator.docs.markdown.{ Clz, URL, fqn, tree }
+import org.hammerlab.iterator.docs.markdown.{ fqn, tree }
 import tree._
 import fqn._
 import fqn.tree._
@@ -11,6 +11,7 @@ import Inline._
 import NonLink._
 import org.hammerlab.iterator.docs._
 import org.hammerlab.iterator.docs.markdown.tree.NonLink
+import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL, symbol }
 import shapeless.{ Inl, Inr }
 
 import scala.scalajs.js

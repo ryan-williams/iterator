@@ -3,7 +3,7 @@ package org.hammerlab.iterator.docs.markdown.tree
 import hammerlab.lines.Lines
 import org.hammerlab.iterator.docs.Opt
 import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.markdown.{ Clz, URL }
+import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL }
 import shapeless.{ :+:, CNil, Inl, Inr }
 
 trait elem[_Id] {

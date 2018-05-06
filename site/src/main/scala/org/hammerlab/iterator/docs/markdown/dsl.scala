@@ -1,7 +1,7 @@
 package org.hammerlab.iterator.docs.markdown
 
 import hammerlab.lines.Lines
-import org.hammerlab.iterator.docs.{ interp, markdown }
+import org.hammerlab.iterator.docs.markdown
 import org.hammerlab.iterator.docs.markdown.tree.NonLink.Del
 
 trait dsl

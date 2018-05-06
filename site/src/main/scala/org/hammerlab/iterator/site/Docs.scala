@@ -1,17 +1,16 @@
 package org.hammerlab.iterator.site
 
 import hammerlab.show._
-import japgolly.scalajs.react.vdom.html_<^.<.div
 import org.hammerlab.docs.Code.Example
 import org.hammerlab.docs.block
-import org.hammerlab.iterator.docs
 import org.hammerlab.iterator.docs._
-import org.hammerlab.iterator.docs.markdown.dsl._
-import org.hammerlab.iterator.docs.markdown.tree.NonLink.Text
-import org.hammerlab.iterator.docs.markdown.{ dsl, fqn, render }
 import org.hammerlab.iterator.site.Menu.Item
+import japgolly.scalajs.react.vdom.html_<^.<.div
+import org.scalajs.dom.document.{ body, getElementById }
+import markdown.{ dsl, fqn, render }
+import markdown.dsl._
+import org.hammerlab.iterator.docs.markdown.tree.NonLink.Text
 import org.hammerlab.lines.Lines
-import org.scalajs.dom.document.getElementById
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
@@ -24,6 +23,8 @@ object Docs
   import build_info.iterator._
   import hammerlab.cmp.first._
   import hammerlab.iterator._
+
+  import cats.instances.int.catsKernelStdOrderForInt
 
   implicit val _github = GitHub(githubUser.get, githubRepo.get)
   implicit val mavenCoords = MavenCoords(organization, name, modName)
@@ -74,19 +75,8 @@ object Docs
       intro :+
       section(
         "Examples",
-        p"Grouped by package:",
-        docs.   count !,
-        docs.  either !,
-        docs.     end !,
-        docs.   group !,
-        docs.   level !,
-        docs.ordering !,
-        docs.   range !,
-        docs.  sample !,
-        docs.    scan !,
-        docs. sliding !,
-        docs.   start !,
-        docs.    util !
+        p"Grouped by package:" ::
+        (sections.!.toList): _*
       )
     )
 
@@ -108,6 +98,17 @@ object Docs
         }
         .toList
     )
+
+  // TODO: fragment-links on headers
+  // TODO: scalafiddle integration
+  // TODO: Seq vs singleton DSLs for NonLink, Inline, Elem
+  // TODO: export dsl
+  // TODO: embed scalajs-react components in DSL
+  // TODO: run examples server-side only
+  // TODO: toggle open/close state of nav elements
+  // TODO: expose nav-bar state (e.g. max depth)
+  // TODO: auto-collapse nav into hamburger menu
+  // TODO: make Inline an Either; fix non-exhaustive-match warnings
 
   def main(args: Array[String]): Unit = {
     menu.renderIntoDOM(

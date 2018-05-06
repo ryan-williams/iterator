@@ -1,8 +1,9 @@
-package org.hammerlab.iterator.docs
+package org.hammerlab.iterator.site.sections
 
 import hammerlab.iterator._
 import hammerlab.option._
 import org.hammerlab.docs.block
+import org.hammerlab.iterator.site.base
 import org.hammerlab.test.Cmp
 
 object level

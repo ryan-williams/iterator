@@ -1,4 +1,6 @@
-package org.hammerlab.iterator.docs
+package org.hammerlab.iterator.site.sections
+
+import org.hammerlab.iterator.site.base
 
 object sample
   extends base {

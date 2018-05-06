@@ -2,7 +2,7 @@ package org.hammerlab.iterator.docs.markdown.tree
 
 import org.hammerlab.iterator.docs.Opt
 import org.hammerlab.iterator.docs.Opt.Non
-import org.hammerlab.iterator.docs.markdown.{ Clz, URL }
+import org.hammerlab.iterator.docs.markdown.util.Clz
 
 trait inline[Id] {
   sealed trait Inline

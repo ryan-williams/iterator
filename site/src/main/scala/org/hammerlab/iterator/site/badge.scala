@@ -5,8 +5,9 @@ import org.hammerlab.iterator.docs.markdown._
 import tree._
 import NonLink._
 import dsl._
-import org.hammerlab.iterator.docs.{ Opt, markdown, symbol }
+import org.hammerlab.iterator.docs.{ Opt, markdown }
 import org.hammerlab.iterator.docs.Opt.Non
+import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL }
 
 import scala.scalajs.js
 

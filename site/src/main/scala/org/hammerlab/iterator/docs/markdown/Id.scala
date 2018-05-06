@@ -1,6 +1,6 @@
 package org.hammerlab.iterator.docs.markdown
 
-import org.hammerlab.iterator.docs.symbol
+import org.hammerlab.iterator.docs.markdown.util.symbol
 
 case class Id(value: String)
 object Id

@@ -1,6 +1,7 @@
-package org.hammerlab.iterator.docs
+package org.hammerlab.iterator.site.sections
 
 import org.hammerlab.docs.block
+import org.hammerlab.iterator.site.base
 
 object util
   extends base {

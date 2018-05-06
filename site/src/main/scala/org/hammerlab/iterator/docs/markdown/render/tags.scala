@@ -6,6 +6,7 @@ import org.hammerlab.iterator.docs.markdown._
 import tree._
 import dsl._
 import NonLink._
+import org.hammerlab.iterator.docs.markdown.util.{ Clz, URL }
 import shapeless.{ Inl, Inr }
 
 object tags {
