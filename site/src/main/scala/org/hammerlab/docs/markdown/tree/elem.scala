@@ -4,19 +4,18 @@ import hammerlab.lines.Lines
 import org.hammerlab.docs.Opt
 import org.hammerlab.docs.Opt.Non
 import org.hammerlab.docs.markdown.util.{ Clz, URL }
-import shapeless.{ :+:, CNil, Inl, Inr }
 
 trait elem[_Id] {
 
   private type Id = _Id
 
-  type Inline = NonLink :+: Inline.A :+: CNil
-  val L = Inl
-  def R[T](t: T) = Inr(Inl(t))
+  type Inline = Either[NonLink, Inline.A]
+  val L = Left
+  def R[T](t: T) = Right(t)
   object R {
-    def unapply[L, R](t: L :+: R :+: CNil): Option[R] =
+    def unapply[L, R](t: Either[L, R]): Option[R] =
       t match {
-        case Inr(Inl(v)) ⇒ Some(v)
+        case Right(v) ⇒ Some(v)
         case _ ⇒ None
       }
   }
@@ -70,7 +69,7 @@ trait elem[_Id] {
 
   type CanLinkTo
 
-  type Target = URL :+: CanLinkTo :+: CNil
+  type Target = Either[URL, CanLinkTo]
   implicit def urlTarget(url: URL): Target = L(url)
   implicit def sectionTarget(section: CanLinkTo): Target = R(section)
 

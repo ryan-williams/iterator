@@ -41,7 +41,6 @@ trait dsl
       ('0' to '9')
     )
 
-    import shapeless.{ Inl, Inr }
     def id(title: Seq[Inline]): Id =
       Id(
         title

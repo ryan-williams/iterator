@@ -96,7 +96,7 @@ object Docs
         .toList
     )
 
-  // TODO: fragment-links on headers
+  // TODO: fragment-links on headers' hover
   // TODO: scalafiddle integration
   // TODO: Seq vs singleton DSLs for NonLink, Inline, Elem
   // TODO: export dsl
@@ -105,7 +105,6 @@ object Docs
   // TODO: toggle open/close state of nav elements
   // TODO: expose nav-bar state (e.g. max depth)
   // TODO: auto-collapse nav into hamburger menu
-  // TODO: make Inline an Either; fix non-exhaustive-match warnings
 
   def main(args: Array[String]): Unit = {
     menu.renderIntoDOM(
