@@ -2,7 +2,6 @@ package org.hammerlab.docs.markdown.fqn
 
 import org.hammerlab.docs.Opt.Non
 import org.hammerlab.docs.{ Opt, markdown }
-import shapeless.{ Inl, Inr }
 import markdown.dsl
 
 import scala.collection.mutable
@@ -60,23 +59,21 @@ object tree
 
           implicit def convTarget(in: dsl.Target): Target =
             in match {
-              case Inl(url) ⇒ Inl(url)
-              case Inr(Inl(section)) ⇒
-                Inr(
-                  Inl(
-                    if (!seen(section))
-                      apply(section)
-                    else
-                      map(section)
-                  )
+              case L(url) ⇒ L(url)
+              case R(section) ⇒
+                R(
+                  if (!seen(section))
+                    apply(section)
+                  else
+                    map(section)
                 )
             }
 
           implicit def inline(in: dsl.Inline): Inline =
             in match {
-              case Inl(l) ⇒ Inl(l)
-              case Inr(Inl(dsl.Inline.A(children, target, alt, clz))) ⇒
-                   Inr(Inl(    Inline.A(children, target, alt, clz)))
+              case L(l) ⇒ L(l)
+              case R(dsl.Inline.A(children, target, alt, clz)) ⇒
+                   R(    Inline.A(children, target, alt, clz))
             }
           implicit def inlines(in: Seq[dsl.Inline]): Seq[Inline] = in.map(inline)
 

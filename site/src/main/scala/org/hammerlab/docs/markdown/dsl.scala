@@ -46,17 +46,17 @@ trait dsl
       Id(
         title
           .map {
-            case Inl(i) ⇒
+            case L(i) ⇒
               i
                 .value
                 .replaceAll(" ", "-")
                 .filter {
                   idChars(_)
                 }
-            case Inr(Inl(A(children, _, _, _))) ⇒
+            case R(A(children, _, _, _)) ⇒
               id(
                 children.map(
-                  Inl(_)
+                  L(_)
                 )
               )
           }

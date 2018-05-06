@@ -69,8 +69,8 @@ object react {
   implicit val urlAttr: ValueType[URL,        String] = by(_.toString)
   implicit val targetAttr: ValueType[Target, String] =
     by {
-      case Inl(url) ⇒ url.toString
-      case Inr(Inl(target)) ⇒ s"#${target.id}"
+      case L(url) ⇒ url.toString
+      case R(target) ⇒ s"#${target.id}"
     }
   implicit val clzAttr: ValueType[Clz, String] = ValueType.byImplicit(_.values.mkString(" "))
 
@@ -84,8 +84,8 @@ object react {
 
   def apply(value: Inline)(implicit k: Key): Tag =
     value match {
-      case Inl(plain) ⇒ this.plain(plain)
-      case Inr(Inl(A(children, url, _alt, clz))) ⇒
+      case L(plain) ⇒ this.plain(plain)
+      case R(A(children, url, _alt, clz)) ⇒
         a(
           key,
           href := url,

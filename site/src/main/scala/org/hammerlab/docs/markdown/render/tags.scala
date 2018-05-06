@@ -32,8 +32,8 @@ object tags {
     implicit val urlToAttrValue: AttrValue[URL] = by(_.toString)
     implicit val targetToAttrValue: AttrValue[Target] =
       by {
-        case Inl(url) ⇒ url.toString
-        case Inr(Inl(target)) ⇒ s"#${target.id}"
+        case L(url) ⇒ url.toString
+        case R(target) ⇒ s"#${target.id}"
       }
     implicit val  idToAttrValue: AttrValue[ Id] = by(_.value)
     implicit val clzToAttrValue: AttrValue[Clz] = by(_.values.mkString(" "))
@@ -62,8 +62,8 @@ object tags {
 
     def apply(inline: Inline): Tag =
       inline match {
-        case Inl(plain) ⇒ this.plain(plain)
-        case Inr(Inl(Inline.A(children, url, _alt, clz))) ⇒
+        case L(plain) ⇒ this.plain(plain)
+        case R(Inline.A(children, url, _alt, clz)) ⇒
           a(
             href := url,
             alt := _alt,

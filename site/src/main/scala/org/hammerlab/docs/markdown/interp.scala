@@ -4,7 +4,6 @@ import org.hammerlab.docs.markdown.dsl._
 import org.hammerlab.docs.markdown.tree.NonLink
 import org.hammerlab.docs.markdown.tree.NonLink.{ Code, Text }
 import org.hammerlab.docs.markdown.util.symbol
-import shapeless.{ Inl, Inr }
 
 trait interp
   extends symbol {
@@ -13,8 +12,8 @@ trait interp
   object Arg {
     implicit def   string(value: String): Arg = Code(value)
     implicit def   symbol(value: Symbol): Arg = Code(value)
-    implicit def nonLinkArg(n: NonLink): Arg = Inl(n)
-    implicit def    linkArg(a: Inline.A): Arg = Inr(Inl(a))
+    implicit def nonLinkArg(n:  NonLink): Arg = L(n)
+    implicit def    linkArg(a: Inline.A): Arg = R(a)
     implicit def modifier(value: Inline): Arg = Arg(value)
     implicit def unwrap(a: Arg): Inline = a.value
   }
