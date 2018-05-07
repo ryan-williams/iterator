@@ -80,9 +80,9 @@ object tags {
 
     def apply(elem: NonSection): Tag =
       elem match {
-        case     P(elems) ⇒   p(elems.map(apply): _*)
-        case    UL(items) ⇒  ul(items.map(apply): _*)
-        case    OL(items) ⇒  ol(items.map(apply): _*)
+        case     P(elems) ⇒   p(elems.map(apply))
+        case    UL(items) ⇒  ul(items.map(apply))
+        case    OL(items) ⇒  ol(items.map(apply))
         case Fence(lines) ⇒ pre(code(lines.showLines))
       }
 

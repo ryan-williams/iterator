@@ -43,7 +43,7 @@ object ordering
             )
           ),
           h(
-            "Merging with a 3rd type",
+            t"Merging with a 3rd type",
             p"Instances of the ${'View} type-class let merges use a type other than that of the elements being merged:",
             fence(
               view,

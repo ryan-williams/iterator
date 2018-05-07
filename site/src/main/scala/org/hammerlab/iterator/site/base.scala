@@ -21,7 +21,7 @@ trait Pkg
           .drop(1)
           .head
         ),
-      body: _*
+      body
     )
 
   def c3(name: String) = section(Code(name))

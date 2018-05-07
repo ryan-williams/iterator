@@ -28,7 +28,7 @@ object group
       p"Contiguous weighted sums up to a maximum:",
       fence(
         example(
-          Iterator(1 to 6: _*).cappedCostGroups(costFn = x⇒x, limit = 10),
+          (1 to 6).cappedCostGroups(costFn = x⇒x, limit = 10),
           Iterator(Iterator(1, 2, 3, 4), Iterator(5), Iterator(6))
         )
       )

@@ -66,14 +66,14 @@ object Docs
     )
 
   val html =
-    Section(
-      github.title,
+    section(
       'iterators,
-      intro :+
+      github.title,
+      intro,
       section(
-        "Examples",
-        p"Grouped by package:" ::
-        (sections.!.toList): _*
+        t"Examples",
+        p"Grouped by package:",
+        sections !
       )
     )
 
@@ -85,20 +85,18 @@ object Docs
     Menu(
       Item(
         rendered.id,
-        Seq(Text("Intro"))
-      ) ::
+        Text("Intro")
+      ),
       rendered
         .elems
         .collect {
           case s: fqn.tree.Section ⇒
             Item(s, 2)
         }
-        .toList
     )
 
   // TODO: fragment-links on headers' hover
   // TODO: scalafiddle integration
-  // TODO: Seq vs singleton DSLs for NonLink, Inline, Elem
   // TODO: export dsl
   // TODO: embed scalajs-react components in DSL
   // TODO: run examples server-side only

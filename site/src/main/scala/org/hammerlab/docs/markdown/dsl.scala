@@ -16,21 +16,17 @@ trait dsl
 
   def fence(body: Code*): Fence =
     Fence(
-      Lines(
-        (
-          body
-          .map {
-            case s: Setup ⇒ Lines(s.lines, "")
-            case c ⇒ Code.lines(c)
-          }
-        ): _*
-      )
+      body
+        .map {
+          case s: Setup ⇒ Lines(s.lines, "")
+          case c ⇒ Code.lines(c)
+        }
     )
-  def p(elems: Inline*): P = P(elems)
+  def p(elems: Inlines*): P = P(elems)
 
   def del(value: String): Del = Del(value)
 
-  object section {
+  trait section {
 
     import Inline.A
 
@@ -62,22 +58,22 @@ trait dsl
           .mkString("-")
       )
 
-    def apply(title: Inline, elems: Elem*): Section = apply(Seq(title), elems: _*)
-    def apply(title: Seq[Inline], elems: Elem*): Section =
+    def apply(title: Inlines, elems: Elems*): Section =
       Section(
         title,
         id(title),
         elems = elems
       )
-  }
 
-  def h(id: Id, title: Seq[Inline], elems: Elem*): Section = Section(title, id, elems)
-  def h(id: Id, title: Inline, elems: Elem*): Section = Section(Seq(title), id, elems)
-  def h(title: Inline, elems: Elem*): Section = section(Seq(title), elems: _*)
+    def apply(id: Id, title: Inlines, elems: Elems*): Section = Section(title, id, elems)
+  }
+  object section extends section
+  object       h extends section
 }
 
 object dsl
   extends markdown.tree.elem[Id] {
   type Id = markdown.Id
+   val Id = markdown.Id
   override type CanLinkTo = Section
 }

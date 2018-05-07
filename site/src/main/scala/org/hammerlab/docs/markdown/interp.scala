@@ -50,7 +50,7 @@ trait interp
         )
     }
 
-    def t(args: Arg*): List[Inline] = {
+    def t(args: Arg*): Seq[Inline] = {
       val strings =
         sc
           .parts

@@ -9,7 +9,23 @@ trait elem[_Id] {
 
   private type Id = _Id
 
+  implicit class Inlines(val elems: Seq[Inline])
+  object Inlines {
+    implicit def single(elem: Inline): Inlines = Inlines(Seq(elem))
+    implicit def unwrap(inline: Inlines): Seq[Inline] = inline.elems
+
+    implicit def inlineNonLink(n: NonLink): Inlines = L(n)
+    implicit def inlineLink(a: Inline.A): Inlines = R(a)
+
+    implicit def inlineNonLinks(n: Seq[NonLink]): Inlines = n.map(L(_))
+    implicit def inlineLinks(a: Seq[Inline.A]): Inlines = a.map(R(_))
+  }
+  implicit def flattenInlines(inlines: Seq[Inlines]): Seq[Inline] = inlines.flatMap(_.elems)
+
   type Inline = Either[NonLink, Inline.A]
+  implicit def inlineNonLink(n: NonLink): Inline = L(n)
+  implicit def inlineLink(a: Inline.A): Inline = R(a)
+
   val L = Left
   def R[T](t: T) = Right(t)
   object R {
@@ -19,12 +35,6 @@ trait elem[_Id] {
         case _ ⇒ None
       }
   }
-
-  implicit def inlineNonLink(n: NonLink): Inline = L(n)
-  implicit def inlineLink(a: Inline.A): Inline = R(a)
-
-  implicit def inlineNonLinks(n: Seq[NonLink]): Seq[Inline] = n.map(L(_))
-  implicit def inlineLinks(a: Seq[Inline.A]): Seq[Inline] = a.map(a ⇒ a: Inline)
 
   object Inline {
 
@@ -82,18 +92,6 @@ trait elem[_Id] {
     elems: Seq[Elem] = Nil
   )
   extends Elem
-  object Section {
-    def apply(
-      title: Inline,
-      id: Id,
-      elems: Seq[Elem]
-    ): Section =
-      Section(
-        Seq(title),
-        id,
-        elems
-      )
-  }
 
   sealed trait NonSection extends Elem
 
@@ -110,4 +108,9 @@ trait elem[_Id] {
   // <li>
   case class LI(title: Inline, elems: Seq[NonSection])
 
+  implicit class Elems(val elems: Seq[Elem])
+  object Elems {
+    implicit def single(elem: Elem): Elems = Elems(Seq(elem))
+  }
+  implicit def flattenElems(elems: Seq[Elems]): Seq[Elem] = elems.flatMap(_.elems)
 }

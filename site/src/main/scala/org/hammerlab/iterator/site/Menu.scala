@@ -10,6 +10,12 @@ import org.hammerlab.docs.markdown.render.react.{ idAttr, inlines }
 
 object Menu {
 
+  implicit class Items(val items: Seq[Item])
+  object Items {
+    implicit def single(item: Item): Items = Items(Seq(item))
+  }
+  implicit def flatten(items: Seq[Items]): Seq[Item] = items.flatMap(_.items)
+
   case class Children(open: Boolean, items: Seq[Item])
   object Children {
     def apply(items: Seq[Item]): Option[Children] =
@@ -22,7 +28,7 @@ object Menu {
   }
   case class Item(id: Id, display: Seq[Inline], children: Option[Children])
   object Item {
-    def apply(id: Id, display: Seq[Inline], children: Item*): Item =
+    def apply(id: Id, display: Inlines, children: Items*): Item =
       Item(
         id,
         display,
@@ -32,16 +38,14 @@ object Menu {
       Item(
         section.id,
         section.title,
-        (
-          if (maxDepth.exists(_ <= depth))
-            Nil
-          else
-            section
-              .elems
-              .collect {
-                case s: Section ⇒ apply(s, maxDepth, depth + 1)
-              }
-        ): _*
+        if (maxDepth.exists(_ <= depth))
+          Nil
+        else
+          section
+            .elems
+            .collect {
+              case s: Section ⇒ apply(s, maxDepth, depth + 1)
+            }
       )
   }
 
@@ -81,5 +85,5 @@ object Menu {
       }
       .build
 
-  def apply(items: Seq[Item]) = component(items)
+  def apply(items: Items*) = component(items)
 }

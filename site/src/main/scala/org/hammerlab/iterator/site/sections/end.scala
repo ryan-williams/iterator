@@ -40,7 +40,7 @@ object end
           p"Drop ${'k} elements from the end of an iterator in ${"O(k)"} space:",
           fence(
             example(
-              Iterator(1 to 10: _*).dropright(4),
+              (1 to 10).dropright(4),
               Iterator(1, 2, 3, 4, 5, 6)
             )
           )

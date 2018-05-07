@@ -10,7 +10,7 @@ object sample
       p"Resevoir-sample:",
       fence(
         example(
-          Iterator(1 to 100: _*).sample(5),
+          (1 to 100).sample(5),
           Array(15, 33, 40, 75, 83)
         )
       )

@@ -74,7 +74,8 @@ object react {
     }
   implicit val clzAttr: ValueType[Clz, String] = ValueType.byImplicit(_.values.mkString(" "))
 
-  implicit def inlines(value: Seq[Inline]): VdomNode =
+  implicit def inlines(value: Seq[Inline]): VdomNode = inlines(value: Inlines)
+  implicit def inlines(value: Inlines): VdomNode =
     value
       .zipWithIndex
       .toVdomArray {
