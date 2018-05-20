@@ -94,7 +94,7 @@ object start
                 Iterator(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
               )
             ),
-            p"See ${github.issue('scala, 'bug, 9247, 308218901)} for more information"
+            p"See ${github.issue('scala, 'bug, 9274, 320518214)} for more information"
           ),
           h(
             'head,
