@@ -1,6 +1,6 @@
 package org.hammerlab.docs.markdown.render
 
-import hammerlab.indent.implicits.spaces2
+import hammerlab.indent.spaces
 import japgolly.scalajs.react.internal.OptionLike
 import japgolly.scalajs.react.{ raw, vdom }
 import org.hammerlab.docs.markdown.{ fqn, tree }

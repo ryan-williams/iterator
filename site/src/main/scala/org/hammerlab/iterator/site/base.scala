@@ -1,8 +1,8 @@
 package org.hammerlab.iterator.site
 
-import hammerlab.indent.implicits.spaces2
+import hammerlab.docs
+import hammerlab.indent.spaces
 import hammerlab.show._
-import org.hammerlab.docs.Code.Example
 import org.hammerlab.docs.markdown._
 import org.hammerlab.docs.markdown.dsl._
 import org.hammerlab.docs.markdown.tree.NonLink._
@@ -28,7 +28,7 @@ trait Pkg
 }
 
 trait base
-  extends Example.make
+  extends docs
      with dsl
      with symbol
      with hammerlab.cmp.first

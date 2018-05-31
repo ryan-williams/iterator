@@ -1,7 +1,7 @@
 package org.hammerlab.iterator.site.sections
 
-import org.hammerlab.docs.Code.{ Comment, Setup }
 import org.hammerlab.iterator.site.base
+import org.hammerlab.docs._
 
 object range
   extends base {

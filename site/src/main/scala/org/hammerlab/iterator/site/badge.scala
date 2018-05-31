@@ -69,7 +69,7 @@ trait badge
 
     def title(implicit gh: GitHub) =
       github.link(
-        n"$user/$repo ${github.badge}",
+        n"$user/$repo ${github.badge}"
       )
 
     def link(elems: Seq[NonLink],

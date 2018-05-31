@@ -1,12 +1,12 @@
 
 default(
   scalacOptions += "-Yrangepos",
-  testSuiteVersion := "1.0.0".snapshot,
-  testUtilsVersion := "1.0.1".snapshot,
+  hammerlab.test.suite.version := "1.0.1",
+  `2.12`.version := "2.12.4",
   versions(
-    scalacss → "0.5.3",
-    scalatags → "0.6.8".snapshot
-  )
+    scalatags → "0.6.7"
+  ),
+  sonatypeStage(1457)  // org.hammerlab.test:*:1.0.1
 )
 
 lazy val core =
@@ -66,44 +66,23 @@ lazy val macros =
 lazy val macrosJS  = macros.js
 lazy val macrosJVM = macros.jvm
 
-lazy val react =
-  project
-    .settings(
-      scala212Only,
-      dep(
-        scalajs.react_dep % "1.2.0"
-      ),
-      npmDependencies in Compile ++= Seq(
-        "react"     → "16.2.0",
-        "react-dom" → "16.2.0"
-      )
-    )
-    .enablePlugins(
-      ScalaJSPlugin,
-      ScalaJSBundlerPlugin
-    )
-
+import scalajs.react
 lazy val site =
   project
     .settings(
-      scala212Only,
-      dep(
-        scalajs.react_dep % "1.2.0"
-      ),
-      npmDependencies in Compile ++= Seq(
-        "react"     → "16.2.0",
-        "react-dom" → "16.2.0"
-      ),
+      react.npm,
       scalaJSUseMainModuleInitializer := true,
       dep(
-        hammerlab.io % "5.0.0".snapshot,
+        hammerlab.io % "5.0.1".snapshot,
+        react,
         scalatags,
         hammerlab("docs", "snippets") % "1.0.0".snapshot
       ),
       enableMacroParadise
     )
     .enablePlugins(
-      JS
+      JS,
+      ScalaJSBundlerPlugin
     )
     .dependsOn(
         coreJS,
@@ -114,5 +93,5 @@ lazy val iterators =
   rootProject(
       coreJS,   coreJVM,
     macrosJS, macrosJVM,
-    react, site
+    site
   )

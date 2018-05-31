@@ -1,6 +1,6 @@
 package org.hammerlab.docs.markdown.render
 
-import hammerlab.indent.implicits.spaces2
+import hammerlab.indent.spaces
 import org.hammerlab.docs.Opt
 import org.hammerlab.docs.markdown._
 import tree._

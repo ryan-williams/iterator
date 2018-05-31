@@ -1,8 +1,8 @@
 package org.hammerlab.iterator.site.sections
 
 import hammerlab.iterator.View
-import org.hammerlab.docs.block
 import org.hammerlab.iterator.site.base
+import hammerlab.docs.block
 
 object ordering
   extends base {

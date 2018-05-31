@@ -1,6 +1,5 @@
 package org.hammerlab.iterator.site.sections
 
-import org.hammerlab.docs.Code.Setup
 import org.hammerlab.docs.markdown.tree.NonLink._
 import org.hammerlab.docs.markdown.util.URL
 import org.hammerlab.iterator.site.base
@@ -18,7 +17,7 @@ object scan
     pkg(
       p"Scans, in terms of $catsMonoidLink, that include the final total/sum ${I('xor)} the initial zero / empty-value:",
       fence(
-        Setup("import hammerlab.monoid._  // some Monoid defaults"),
+        setup("import hammerlab.monoid._  // some Monoid defaults"),
         example(
           Seq(1, 2, 3, 4).scanL,
           Iterator(0, 1, 3, 6)

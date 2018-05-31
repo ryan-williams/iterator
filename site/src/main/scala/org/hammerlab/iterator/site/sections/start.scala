@@ -1,7 +1,7 @@
 package org.hammerlab.iterator.site.sections
 
-import org.hammerlab.docs.block
 import org.hammerlab.iterator.site.{ badge, base }
+import hammerlab.docs.block
 
 object start
   extends base

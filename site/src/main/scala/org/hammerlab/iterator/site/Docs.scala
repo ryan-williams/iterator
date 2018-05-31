@@ -6,8 +6,8 @@ import hammerlab.cmp.first._
 import hammerlab.iterator._
 import hammerlab.show._
 import japgolly.scalajs.react.vdom.html_<^.<.div
-import org.hammerlab.docs.Code.Example
-import org.hammerlab.docs._
+import org.hammerlab.docs.Example
+import org.hammerlab.docs._, Code._
 import org.hammerlab.docs.markdown.dsl._
 import org.hammerlab.docs.markdown.tree.NonLink.Text
 import org.hammerlab.docs.markdown.{ dsl, fqn, render }
@@ -19,7 +19,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 
 @JSExportTopLevel("hammerlab.iterators.docs")
 object Docs
-  extends Example.make
+  extends hammerlab.docs
      with dsl
      with badge {
 

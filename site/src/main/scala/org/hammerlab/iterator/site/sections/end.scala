@@ -2,8 +2,8 @@ package org.hammerlab.iterator.site.sections
 
 import java.io.ByteArrayInputStream
 
-import org.hammerlab.docs.block
 import org.hammerlab.iterator.site.base
+import hammerlab.docs.block
 
 object end
   extends base {

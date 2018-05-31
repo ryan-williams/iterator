@@ -2,9 +2,9 @@ package org.hammerlab.iterator.site.sections
 
 import hammerlab.iterator._
 import hammerlab.option._
-import org.hammerlab.docs.block
 import org.hammerlab.iterator.site.base
 import org.hammerlab.test.Cmp
+import hammerlab.docs.block
 
 object level
   extends base {
@@ -18,7 +18,12 @@ object level
 
   val ! =
     new setup {
-      implicit val iterators: Cmp[Iterator[Int]] = Cmp((l, r) ⇒ (l != r) ? "!=")
+      /**
+       * "override" [[hammerlab.cmp.first.iteratorsCanEq]] to use reference equality; important so the examples below
+       * don't each completely drain the example-iterator, so that the examples actually verify that the `cur` pointer
+       * points to the correct sub-iterator at each step.
+       */
+      implicit val iteratorsCanEq: Cmp[Iterator[Int]] = Cmp((l, r) ⇒ (l != r) ? "!=")
       val ! =
         pkg(
           p"Flatten a nested iterator but retain access to a cursor into unflattened version:",
