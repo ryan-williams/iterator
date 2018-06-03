@@ -11,7 +11,7 @@ class Sliding3OptTest extends Suite {
       .toList
 
   test("empty") {
-    slidingList() should be(Nil)
+    ==(slidingList(), Nil)
   }
 
   test("one") {

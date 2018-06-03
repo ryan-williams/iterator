@@ -5,7 +5,7 @@ import org.hammerlab.Suite
 
 class ContiguousTest extends Suite {
   test("empty") {
-    Iterator().contiguousRanges.toList should be(Nil)
+    ==(Iterator().contiguousRanges.toSeq, Nil)
   }
 
   test("simple") {

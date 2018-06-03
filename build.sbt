@@ -1,11 +1,13 @@
 
 default(
   scalacOptions += "-Yrangepos",
-  hammerlab.test.suite.version := "1.0.1",
+  //hammerlab.test.suite.version := "1.0.1",
   `2.12`.version := "2.12.4",
   versions(
     scalatags → "0.6.7"
   ),
+  testUtilsVersion := "1.0.1".snapshot,
+  testSuiteVersion := "1.0.1".snapshot,
   sonatypeStage(1457)  // org.hammerlab.test:*:1.0.1
 )
 
@@ -52,8 +54,9 @@ lazy val core =
     .enablePlugins(
       BuildInfoPlugin
     )
-lazy val coreJS  = core.js
-lazy val coreJVM = core.jvm
+lazy val `core.js`  = core.js
+lazy val `core.jvm` = core.jvm
+lazy val `core-x`   = parent(`core.js`, `core.jvm`)
 
 lazy val macros =
   crossProject
@@ -63,8 +66,9 @@ lazy val macros =
       scalameta,
       enableMacroParadise
     )
-lazy val macrosJS  = macros.js
-lazy val macrosJVM = macros.jvm
+lazy val `macros.js`  = macros.js
+lazy val `macros.jvm` = macros.jvm
+lazy val `macros-x`   = parent(`macros.js`, `macros.jvm`)
 
 import scalajs.react
 lazy val site =
@@ -85,13 +89,13 @@ lazy val site =
       ScalaJSBundlerPlugin
     )
     .dependsOn(
-        coreJS,
-      macrosJS
+        `core.js`,
+      `macros.js`
     )
 
 lazy val iterators =
-  rootProject(
-      coreJS,   coreJVM,
-    macrosJS, macrosJVM,
-    site
+  root(
+      `core-x`,
+    `macros-x`,
+         site
   )

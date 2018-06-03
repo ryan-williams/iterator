@@ -11,15 +11,15 @@ class Sliding3Test extends Suite {
       .toList
 
   test("empty") {
-    slidingList() should be(Nil)
+    ==(slidingList(), Nil)
   }
 
   test("one") {
-    slidingList("a") should be(Nil)
+    ==(slidingList("a"), Nil)
   }
 
   test("two") {
-    slidingList("a", "b") should be(Nil)
+    ==(slidingList("a", "b"), Nil)
   }
 
   test("three") {

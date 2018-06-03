@@ -1,5 +1,8 @@
 package org.hammerlab.docs
 
+/**
+ * Wrapper for [[Option]] that automatically lifts values into a [[Some]] ([[org.hammerlab.docs.Opt.Som]])
+ */
 sealed trait Opt[+T]
 object Opt {
   case object Non extends Opt[Nothing]
