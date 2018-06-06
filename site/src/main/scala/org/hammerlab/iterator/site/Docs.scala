@@ -2,7 +2,6 @@ package org.hammerlab.iterator.site
 
 import build_info.iterator._
 import cats.instances.int.catsKernelStdOrderForInt
-import hammerlab.cmp.first._
 import hammerlab.iterator._
 import hammerlab.show._
 import japgolly.scalajs.react.vdom.html_<^.<.div

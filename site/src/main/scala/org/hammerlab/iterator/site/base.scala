@@ -31,7 +31,6 @@ trait base
   extends docs
      with dsl
      with symbol
-     with hammerlab.cmp.first
      with hammerlab.iterator.all
      with cats.instances.AllInstances
      with Pkg

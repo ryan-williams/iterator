@@ -23,7 +23,8 @@ class Sliding3Test extends Suite {
   }
 
   test("three") {
-    slidingList("a", "b", "c") should be(
+    ==(
+      slidingList("a", "b", "c"),
       List(
         ("a", "b", "c")
       )
@@ -31,7 +32,8 @@ class Sliding3Test extends Suite {
   }
 
   test("four") {
-    slidingList("a", "b", "c", "d") should be(
+    ==(
+      slidingList("a", "b", "c", "d"),
       List(
         ("a", "b", "c"),
         ("b", "c", "d")
@@ -40,7 +42,8 @@ class Sliding3Test extends Suite {
   }
 
   test("five") {
-    slidingList("a", "b", "c", "d", "e") should be(
+    ==(
+      slidingList("a", "b", "c", "d", "e"),
       List(
         ("a", "b", "c"),
         ("b", "c", "d"),

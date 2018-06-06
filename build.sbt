@@ -1,14 +1,17 @@
 
 default(
   scalacOptions += "-Yrangepos",
-  //hammerlab.test.suite.version := "1.0.1",
   `2.12`.version := "2.12.4",
   versions(
     scalatags → "0.6.7"
   ),
-  testUtilsVersion := "1.0.1".snapshot,
   testSuiteVersion := "1.0.1".snapshot,
-  sonatypeStage(1457)  // org.hammerlab.test:*:1.0.1
+  testUtilsVersion := "1.0.1".snapshot,
+  sonatypeStage(
+    1469,  // org.hammerlab.test:*:1.0.1
+    1470,  // shapeless-utils 1.3.0
+    1471   // io
+  )
 )
 
 lazy val core =
@@ -74,10 +77,11 @@ import scalajs.react
 lazy val site =
   project
     .settings(
+      `2.12` only,
       react.npm,
       scalaJSUseMainModuleInitializer := true,
       dep(
-        hammerlab.io % "5.0.1".snapshot,
+        hammerlab.io % "5.1.0",
         react,
         scalatags,
         hammerlab("docs", "snippets") % "1.0.0".snapshot
